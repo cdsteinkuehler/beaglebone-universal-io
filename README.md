@@ -155,7 +155,7 @@ Manual from TI to determine how to setup pin multiplexing for the
 various special functions.  I find the following reference quite
 helpful, particularly the spreadsheet file:
 
-    https://github.com/selsinork/beaglebone-black-pinmux
+https://github.com/selsinork/beaglebone-black-pinmux
 
 Eventually, I hope to write a utility to handle setting up pin
 multiplexing for the various functions that will translate BeagleBone
