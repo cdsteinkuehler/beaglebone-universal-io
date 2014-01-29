@@ -418,15 +418,15 @@
 
             /* P9_24 (ZCZ ball D15) */
             P9_24_gpio_pin: pinmux_P9_24_gpio_pin {
-                pinctrl-single,pins = <0x084  0x67>; };     /* Mode 7, Pull-Up, RxActive */
+                pinctrl-single,pins = <0x184  0x67>; };     /* Mode 7, Pull-Up, RxActive */
             P9_24_uart_pin: pinmux_P9_24_uart_pin {
-                pinctrl-single,pins = <0x084  0x60>; };     /* Mode 0, Pull-Up, RxActive */
+                pinctrl-single,pins = <0x184  0x60>; };     /* Mode 0, Pull-Up, RxActive */
             P9_24_can_pin: pinmux_P9_24_can_pin {
-                pinctrl-single,pins = <0x084  0x62>; };     /* Mode 2, Pull-Up, RxActive */
+                pinctrl-single,pins = <0x184  0x62>; };     /* Mode 2, Pull-Up, RxActive */
             P9_24_i2c_pin: pinmux_P9_24_i2c_pin {
-                pinctrl-single,pins = <0x084  0x63>; };     /* Mode 3, Pull-Up, RxActive */
+                pinctrl-single,pins = <0x184  0x63>; };     /* Mode 3, Pull-Up, RxActive */
             P9_24_pruin_pin: pinmux_P9_24_pruin_pin {
-                pinctrl-single,pins = <0x084  0x66>; };     /* Mode 6, Pull-Up, RxActive */
+                pinctrl-single,pins = <0x184  0x66>; };     /* Mode 6, Pull-Up, RxActive */
 
             /* P9_25 (ZCZ ball A14) */
             P9_25_gpio_pin: pinmux_P9_25_gpio_pin {
