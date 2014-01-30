@@ -182,7 +182,7 @@ usage () {
 	        low | 0 :
 	            Set pinmux to gpio and set gpio direction to output driving low
 	$NAME -l <pin>
-	    list leagle <mode> values for <pin>
+	    list valid <mode> values for <pin>
 	$NAME -q <pin>
 	    query pin and report configuration details
 	$NAME -f <file>
