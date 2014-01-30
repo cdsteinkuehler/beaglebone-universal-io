@@ -1,0 +1,383 @@
+#!/bin/sh
+
+# Some important directories for use later
+OCPDIR=/sys/devices/ocp.*
+GPIODIR=/sys/class/gpio
+
+# Create mappings between BeagleBone header pins and kernel gpio
+# numbers.  These could be bash arrays or coded in python, but simple
+#  shell constructs so this code runs on a minimal system (including
+# the BusyBox ash shell in an initrd)
+
+P8_03_GPIO="38"
+P8_04_GPIO="39"
+P8_05_GPIO="34"
+P8_06_GPIO="35"
+P8_07_GPIO="66"
+P8_08_GPIO="67"
+P8_09_GPIO="69"
+P8_10_GPIO="68"
+P8_11_GPIO="45"
+P8_12_GPIO="44"
+P8_13_GPIO="23"
+P8_14_GPIO="26"
+P8_15_GPIO="47"
+P8_16_GPIO="46"
+P8_17_GPIO="27"
+P8_18_GPIO="65"
+P8_19_GPIO="22"
+P8_20_GPIO="63"
+P8_21_GPIO="62"
+P8_22_GPIO="37"
+P8_23_GPIO="36"
+P8_24_GPIO="33"
+P8_25_GPIO="32"
+P8_26_GPIO="61"
+P8_27_GPIO="86"
+P8_28_GPIO="88"
+P8_29_GPIO="87"
+P8_30_GPIO="89"
+P8_31_GPIO="10"
+P8_32_GPIO="11"
+P8_33_GPIO="9"
+P8_34_GPIO="81"
+P8_35_GPIO="8"
+P8_36_GPIO="80"
+P8_37_GPIO="78"
+P8_38_GPIO="79"
+P8_39_GPIO="76"
+P8_40_GPIO="77"
+P8_41_GPIO="74"
+P8_42_GPIO="75"
+P8_43_GPIO="72"
+P8_44_GPIO="73"
+P8_45_GPIO="70"
+P8_46_GPIO="71"
+
+P9_11_GPIO="30"
+P9_12_GPIO="60"
+P9_13_GPIO="31"
+P9_14_GPIO="50"
+P9_15_GPIO="48"
+P9_16_GPIO="51"
+P9_17_GPIO="5"
+P9_18_GPIO="4"
+P9_19_GPIO="13"
+P9_20_GPIO="12"
+P9_21_GPIO="3"
+P9_22_GPIO="2"
+P9_23_GPIO="49"
+P9_24_GPIO="15"
+P9_25_GPIO="117"
+P9_26_GPIO="14"
+P9_27_GPIO="115"
+P9_28_GPIO="113"
+P9_29_GPIO="111"
+P9_30_GPIO="112"
+P9_31_GPIO="110"
+
+P9_41_GPIO="20"
+P9_91_GPIO="116"
+P9_42_GPIO="7"
+P9_92_GPIO="114"
+
+# Create list of valid pinmux entries for each header pin
+
+# P8_03_PINMUX="emmc"
+# P8_04_PINMUX="emmc"
+# P8_05_PINMUX="emmc"
+# P8_06_PINMUX="emmc"
+P8_07_PINMUX="default gpio timer"
+P8_08_PINMUX="default gpio timer"
+P8_09_PINMUX="default gpio timer"
+P8_10_PINMUX="default gpio timer"
+P8_11_PINMUX="default gpio pruout qep"
+P8_12_PINMUX="default gpio pruout qep"
+P8_13_PINMUX="default gpio pwm"
+P8_14_PINMUX="default gpio pwm"
+P8_15_PINMUX="default gpio pruin qep"
+P8_16_PINMUX="default gpio pruin qep"
+P8_17_PINMUX="default gpio pwm"
+P8_18_PINMUX="default gpio"
+P8_19_PINMUX="default gpio pwm"
+# P8_20_PINMUX="emmc"
+# P8_21_PINMUX="emmc"
+# P8_22_PINMUX="emmc"
+# P8_23_PINMUX="emmc"
+# P8_24_PINMUX="emmc"
+# P8_25_PINMUX="emmc"
+P8_26_PINMUX="default gpio"
+# P8_27_PINMUX="hdmi"
+# P8_28_PINMUX="hdmi"
+# P8_29_PINMUX="hdmi"
+# P8_30_PINMUX="hdmi"
+# P8_31_PINMUX="hdmi"
+# P8_32_PINMUX="hdmi"
+# P8_33_PINMUX="hdmi"
+# P8_34_PINMUX="hdmi"
+# P8_35_PINMUX="hdmi"
+# P8_36_PINMUX="hdmi"
+# P8_37_PINMUX="hdmi"
+# P8_38_PINMUX="hdmi"
+# P8_39_PINMUX="hdmi"
+# P8_40_PINMUX="hdmi"
+# P8_41_PINMUX="hdmi"
+# P8_42_PINMUX="hdmi"
+# P8_43_PINMUX="hdmi"
+# P8_44_PINMUX="hdmi"
+# P8_45_PINMUX="hdmi"
+# P8_46_PINMUX="hdmi"
+
+P9_11_PINMUX="default gpio uart"
+P9_12_PINMUX="default gpio"
+P9_13_PINMUX="default gpio uart"
+P9_14_PINMUX="default gpio pwm"
+P9_15_PINMUX="default gpio pwm"
+P9_16_PINMUX="default gpio pwm"
+P9_17_PINMUX="default gpio spi i2c pwm"
+P9_18_PINMUX="default gpio spi i2c pwm"
+# P9_19_PINMUX="cape_i2c"
+# P9_20_PINMUX="cape_i2c"
+P9_21_PINMUX="default gpio spi uart i2c pwm"
+P9_22_PINMUX="default gpio spi uart i2c pwm"
+P9_23_PINMUX="default gpio pwm"
+P9_24_PINMUX="default gpio uart can i2c pruin"
+P9_25_PINMUX="default gpio qep pruout pruin"
+P9_26_PINMUX="default gpio uart can i2c pruin"
+P9_27_PINMUX="default gpio qep pruout pruin"
+P9_28_PINMUX="default gpio pwm spi pwm2 pruout pruin"
+P9_29_PINMUX="default gpio pwm spi pruout pruin"
+P9_30_PINMUX="default gpio pwm spi pruout pruin"
+# P9 31-40 Analog In, no pinmux
+P9_31_PINMUX="default gpio pwm spi pruout pruin"
+P9_41_PINMUX="default gpio timer pruin"
+P9_91_PINMUX="default gpio qep pruout pruin"
+P9_42_PINMUX="default gpio pwm uart spics spiclk"
+P9_92_PINMUX="default gpio qep pruout pruin"
+
+echo_err () {
+	echo "$@" 1>&2
+}
+
+echo_dbg () {
+	[ -n "$DEBUG" ] && echo "$@" 1>&2
+}
+
+usage () {
+	NAME="$(basename $0)"
+	cat <<- EOF
+	$NAME <pin> <mode>
+	    Set <pin> to <mode>, configuring pin multiplexing and optionally
+	    configuring the gpio.  Valid <mode> strings vary based on <pin>,
+	    however all pins have a default and gpio mode.  To setup gpio
+	    the following <mode> strings are all valid:
+	        gpio : 
+	            Set pinmux to gpio, gpio direction and value unchanged
+	        in | input:
+	            Set pinmux to gpio and set gpio direction to input
+	        out | output :
+	            Set pinmux to gpio and set gpio direction to output
+	        high | 1 :
+	            Set pinmux to gpio and set gpio direction to output driving high
+	        low | 0 :
+	            Set pinmux to gpio and set gpio direction to output driving low
+	$NAME -l <pin>
+	    list leagle <mode> values for <pin>
+	$NAME -q <pin>
+	    query pin and report configuration details
+	$NAME -f <file>
+	    Read list of pin configurations from <file>, one per line
+	    Comments and white-space are allowed
+	
+	EOF
+}
+
+# Be friendly about pin naming conventions
+# $1 = Pin name
+fixup_pin () {
+	local PIN
+	# Use ash-friendly substitutions: ${ % } ${ # }
+	case "$1" in
+	[pP]*)  X="${1#?}" ;;
+	*)  X="$1" ;;
+	esac
+
+	case "$X" in
+	# There is no pin 00
+	*00)	echo_err "Invalid pin: $1"
+		exit 1
+		;;
+	# Missing separator, single digit pin number
+	[89][1-9])  
+		PIN=P${X%?}_0${X#?}
+		;;
+	# Missing separator, two digit pin number
+	[89][0-4][0-9])
+		PIN=P${X%??}_${X#?}
+		;;
+	# Single digit pin number
+	[89][!0-9][1-9])	
+		PIN=P${X%???}_0${X#??}
+		;;
+	# Two digit pin number
+	[89][!0-9][0-4][0-9])
+		PIN=P${X%???}_${X#??}
+		;;
+	# Anything else is an error
+	*)  echo_err "Invalid pin: \"$1\" \"$X\""
+		exit 1
+		;;
+	esac
+
+	echo $PIN
+}
+
+# List the legal mode values for a pin
+# $1 = Pin Name
+listmodes () {
+	PIN=$(fixup_pin $1)
+	eval MODES="\$${PIN}_PINMUX"
+	if [ -z "$MODES" ] ; then
+		echo_err "Unknown pin: $1"
+		exit 1
+	else
+		echo "$MODES"
+	fi
+}
+
+# List current pin settings
+# $1 = Pin name
+query_pin () {
+	PIN=$(fixup_pin $1)
+
+	# Expand filename using shell globbing
+	for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
+		if [ -r $FILE ] ; then
+			read MODE JUNK < $FILE
+			echo "$PIN Mode: $MODE"
+		else
+			echo_err "Cannot read pinmux file: $FILE"
+			exit 1
+		fi
+	done	
+}
+
+# Configure a single pin
+# $1 = Pin name
+# $2 = Pin mode
+config_pin () {
+	PIN=$(fixup_pin $1)
+
+	MODES="$(listmodes $PIN)"
+	DIR=""
+
+	case $2 in
+	# Map special GPIO setup modes to gpio with direction set
+	in|input)    MODE=gpio; DIR=in   ;;
+	out|output)  MODE=gpio; DIR=out  ;;
+	low|0)       MODE=gpio; DIR=low  ;;
+	high|1)      MODE=gpio; DIR=high ;;
+
+	# Check to make sure the provided mode is legal
+	*)  MODE="$2"; DIR=""
+		FOUND=0
+		set -- $MODES
+		while [ $# -gt 0 ] ; do
+			if [ "$MODE" = "$1" ] ; then
+				FOUND=1
+				break
+			fi
+			shift
+		done
+		
+		if [ $FOUND != 1 ] ; then
+			echo_err "Invalid mode: $MODE"
+			exit 1
+		fi
+	esac
+
+	echo_dbg "PIN: \"$PIN\" MODE: \"$MODE\" DIR: \"$DIR\""
+
+	if [ -n "$DIR" ] ; then
+		eval GPIO="\$${PIN}_GPIO"
+		FILE="$GPIODIR/gpio$GPIO/direction"
+		if [ -w "$FILE" ] ; then
+			echo $DIR > "$FILE"
+		else
+			echo_err "Cannot write gpio direction file: $FILE"
+			exit 1
+		fi
+	fi
+
+	# Expand filename using shell globbing
+	for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
+		if [ -w $FILE ] ; then
+			echo_dbg "echo $MODE > $FILE"
+			echo $MODE > $FILE
+		else
+			echo_err "Cannot write pinmux file: $FILE"
+			exit 1
+		fi
+	done
+}
+
+# Read a file containing pin setup tuples and optional comments and whitespace
+# $1 filename to read
+readfile () {
+	if [ ! -r "$1" ] ; then
+		echo_err "Cannot read file: $1"
+		exit 1
+	fi
+
+	while read PIN MODE JUNK ; do
+		case $PIN in 
+		""|\#*)	continue ;;
+		*) config_pin $PIN $MODE ;;
+		esac
+	done < $1
+	
+}
+
+# main ()
+
+DEBUG=""
+CMD=""
+CMDARG=""
+
+while getopts df:l:q: opt ; do
+	case $opt in 
+	d)	[ "$DEBUG" = 1 ] && set -x
+		DEBUG=1
+		;;
+	l)	CMD=list
+		CMDARG="$OPTARG"
+		;;
+	q)	CMD=query
+		CMDARG="$OPTARG"
+		;;
+	f)	CMD=file
+		CMDARG="$OPTARG"
+		;;
+	\?)	usage
+		exit 1
+		;;
+	esac
+done
+
+shift `expr $OPTIND - 1`
+
+echo_dbg "Args: $@"
+
+case $CMD in
+list)	listmodes "$CMDARG" ;;
+query)	query_pin "$CMDARG" ;;
+file)	readfile "$CMDARG" ;;
+*)	if [ $# -ne 2 ] ; then
+		usage
+		exit 1
+	else
+		config_pin "$1" "$2"
+	fi
+	;;
+esac
+
