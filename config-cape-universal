@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/dash
 
 # Some important directories for use later
 OCPDIR=/sys/devices/ocp.*
@@ -185,9 +185,10 @@ usage () {
 	    list valid <mode> values for <pin>
 	$NAME -q <pin>
 	    query pin and report configuration details
-	$NAME -f <file>
+	$NAME -f [file]
 	    Read list of pin configurations from <file>, one per line
 	    Comments and white-space are allowed
+	    With no file, or when file is -, read standard input.
 	
 	EOF
 }
@@ -217,7 +218,7 @@ fixup_pin () {
 		;;
 	# Single digit pin number
 	[89][!0-9][1-9])	
-		PIN=P${X%???}_0${X#??}
+		PIN=P${X%??}_0${X#??}
 		;;
 	# Two digit pin number
 	[89][!0-9][0-4][0-9])
@@ -324,17 +325,25 @@ config_pin () {
 # Read a file containing pin setup tuples and optional comments and whitespace
 # $1 filename to read
 readfile () {
-	if [ ! -r "$1" ] ; then
-		echo_err "Cannot read file: $1"
-		exit 1
-	fi
+	case $1 in
+	# Use standard in
+	""|-) 	exec 3<&0 ;;
+
+	# Use actual file
+	*)	if [ ! -r "$1" ] ; then
+			echo_err "Cannot read file: $1"
+			exit 1
+		fi
+		exec 3< $1
+		;;
+	esac
 
 	while read PIN MODE JUNK ; do
 		case $PIN in 
 		""|\#*)	continue ;;
 		*) config_pin $PIN $MODE ;;
 		esac
-	done < $1
+	done <&3
 	
 }
 
@@ -344,7 +353,7 @@ DEBUG=""
 CMD=""
 CMDARG=""
 
-while getopts df:l:q: opt ; do
+while getopts dfl:q: opt ; do
 	case $opt in 
 	d)	[ "$DEBUG" = 1 ] && set -x
 		DEBUG=1
@@ -356,7 +365,6 @@ while getopts df:l:q: opt ; do
 		CMDARG="$OPTARG"
 		;;
 	f)	CMD=file
-		CMDARG="$OPTARG"
 		;;
 	\?)	usage
 		exit 1
@@ -371,7 +379,7 @@ echo_dbg "Args: $@"
 case $CMD in
 list)	listmodes "$CMDARG" ;;
 query)	query_pin "$CMDARG" ;;
-file)	readfile "$CMDARG" ;;
+file)	readfile "$@" ;;
 *)	if [ $# -ne 2 ] ; then
 		usage
 		exit 1
