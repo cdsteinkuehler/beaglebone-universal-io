@@ -213,7 +213,7 @@ fixup_pin () {
 		PIN=P${X%?}_0${X#?}
 		;;
 	# Missing separator, two digit pin number
-	[89][0-4][0-9])
+	[89][0-49][0-9])
 		PIN=P${X%??}_${X#?}
 		;;
 	# Single digit pin number
@@ -221,7 +221,7 @@ fixup_pin () {
 		PIN=P${X%??}_0${X#??}
 		;;
 	# Two digit pin number
-	[89][!0-9][0-4][0-9])
+	[89][!0-9][0-49][0-9])
 		PIN=P${X%???}_${X#??}
 		;;
 	# Anything else is an error
