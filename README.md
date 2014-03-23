@@ -31,13 +31,16 @@ This behavior may change, however.  If the BeagleBone begins shipping
 with some I/O pins configured by default at boot, this overlay will
 likely change to match.
 
+The provided config-pin utility is intended to assist with  setting up
+the various pin modes and querying the current pin state.  If you wish
+to setup the pins manually, or to know what is happening behind the
+curtain, keep reading.
+
 To control the gpio pins, you may use the sysfs interface.  Each
 exported gpio pin has an entry under /sys/class/gpio/gpioNN, where NN
-represents the kernel gpio number for that pin.  I hope to write a
-utility to control pin multiplexing and GPIO setup that doesn't
-require mapping BeagleBone pin numbering to kernel gpio numbers, but
-in the mean time you can find the list created for you in the status
-file of the device tree overlay:
+represents the kernel gpio number for that pin.  If you have forgotten
+the BeagleBone pin to kernel gpio number mapping, you may refer to the
+list created for you in the status file of the device tree overlay:
 
     root@arm:~# cat /sys/devices/ocp.*/cape-universal.*/status
      0 P9_92                    114 IN  0
@@ -108,57 +111,67 @@ Or you can write to change the pinmux setting for the pin:
     timer
 
 Each pin has a default state and a gpio state.  Currently the default
-state for all pins is gpio, but that could change.  If the BeagleBone
-begins shipping with a default I/O setup that enables some special
-functions, this overlay will likely change to match.  Most pins have
-other functions available besides gpio, see the list below for valid
-settings.
+state for all pins is gpio with pull-up/down resistor set to the reset
+default value, but this could change.  If the BeagleBone begins shipping
+with a default I/O setup that enables some special functions, this
+overlay will likely change to match.  Most pins have other functions
+available besides gpio, see the list below for valid settings.
 
 The valid pinmux states for each pin are listed below:
 
-    # P8 3-6 Reserved for eMMC
-    P8_07_pinmux : default gpio timer 
-    P8_08_pinmux : default gpio timer 
-    P8_09_pinmux : default gpio timer 
-    P8_10_pinmux : default gpio timer 
-    P8_11_pinmux : default gpio pruout qep 
-    P8_12_pinmux : default gpio pruout qep 
-    P8_13_pinmux : default gpio pwm 
-    P8_14_pinmux : default gpio pwm 
-    P8_15_pinmux : default gpio pruin qep 
-    P8_16_pinmux : default gpio pruin qep 
-    P8_17_pinmux : default gpio pwm 
-    P8_18_pinmux : default gpio 
-    P8_19_pinmux : default gpio pwm 
-    # P8 20-25 Reserved for eMMC
+  * = Reserved for eMMC, you must disable the eMMC to use these pins
+  * P8_03_pinmux : default gpio gpio_pu gpio_pd
+  * P8_04_pinmux : default gpio gpio_pu gpio_pd
+  * P8_05_pinmux : default gpio gpio_pu gpio_pd
+  * P8_06_pinmux : default gpio gpio_pu gpio_pd
+    P8_07_pinmux : default gpio gpio_pu gpio_pd timer
+    P8_08_pinmux : default gpio gpio_pu gpio_pd timer
+    P8_09_pinmux : default gpio gpio_pu gpio_pd timer
+    P8_10_pinmux : default gpio gpio_pu gpio_pd timer
+    P8_11_pinmux : default gpio gpio_pu gpio_pd pruout qep
+    P8_12_pinmux : default gpio gpio_pu gpio_pd pruout qep
+    P8_13_pinmux : default gpio gpio_pu gpio_pd pwm
+    P8_14_pinmux : default gpio gpio_pu gpio_pd pwm
+    P8_15_pinmux : default gpio gpio_pu gpio_pd pruin qep
+    P8_16_pinmux : default gpio gpio_pu gpio_pd pruin qep
+    P8_17_pinmux : default gpio gpio_pu gpio_pd pwm
+    P8_18_pinmux : default gpio gpio_pu gpio_pd
+    P8_19_pinmux : default gpio gpio_pu gpio_pd pwm
+  * P8_20_pinmux : default gpio gpio_pu gpio_pd pruout pruin
+  * P8_21_pinmux : default gpio gpio_pu gpio_pd pruout pruin
+  * P8_22_pinmux : default gpio gpio_pu gpio_pd
+  * P8_23_pinmux : default gpio gpio_pu gpio_pd
+  * P8_24_pinmux : default gpio gpio_pu gpio_pd
+  * P8_25_pinmux : default gpio gpio_pu gpio_pd
     P8_26_pinmux : default gpio 
-    # P8 27-46 Reserved for HDMI
+  # P8 27-46 Reserved for HDMI
 
-    P9_11_pinmux : default gpio uart 
-    P9_12_pinmux : default gpio 
-    P9_13_pinmux : default gpio uart 
-    P9_14_pinmux : default gpio pwm 
-    P9_15_pinmux : default gpio pwm 
-    P9_16_pinmux : default gpio pwm 
-    P9_17_pinmux : default gpio spi i2c pwm 
-    P9_18_pinmux : default gpio spi i2c pwm 
+    P9_11_pinmux : default gpio gpio_pu gpio_pd uart 
+    P9_12_pinmux : default gpio gpio_pu gpio_pd 
+    P9_13_pinmux : default gpio gpio_pu gpio_pd uart 
+    P9_14_pinmux : default gpio gpio_pu gpio_pd pwm 
+    P9_15_pinmux : default gpio gpio_pu gpio_pd pwm 
+    P9_16_pinmux : default gpio gpio_pu gpio_pd pwm 
+    P9_17_pinmux : default gpio gpio_pu gpio_pd spi i2c pwm 
+    P9_18_pinmux : default gpio gpio_pu gpio_pd spi i2c pwm 
     # P9_19 Reserved for cape I2C bus
     # P9_20 Reserved for cape I2C bus
-    P9_21_pinmux : default gpio spi uart i2c pwm 
-    P9_22_pinmux : default gpio spi uart i2c pwm 
-    P9_23_pinmux : default gpio pwm 
-    P9_24_pinmux : default gpio uart can i2c pruin 
-    P9_25_pinmux : default gpio qep pruout pruin 
-    P9_26_pinmux : default gpio uart can i2c pruin 
-    P9_27_pinmux : default gpio qep pruout pruin 
-    P9_28_pinmux : default gpio pwm spi pwm2 pruout pruin 
-    P9_29_pinmux : default gpio pwm spi pruout pruin 
-    P9_30_pinmux : default gpio pwm spi pruout pruin 
-    P9_31_pinmux : default gpio pwm spi pruout pruin 
-    P9_41_pinmux : default gpio timer pruin 
-    P9_91_pinmux : default gpio qep pruout pruin 
-    P9_42_pinmux : default gpio pwm uart spics spiclk 
-    P9_92_pinmux : default gpio qep pruout pruin 
+    P9_21_pinmux : default gpio gpio_pu gpio_pd spi uart i2c pwm 
+    P9_22_pinmux : default gpio gpio_pu gpio_pd spi uart i2c pwm 
+    P9_23_pinmux : default gpio gpio_pu gpio_pd pwm 
+    P9_24_pinmux : default gpio gpio_pu gpio_pd uart can i2c pruin 
+    P9_25_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
+    P9_26_pinmux : default gpio gpio_pu gpio_pd uart can i2c pruin 
+    P9_27_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
+    P9_28_pinmux : default gpio gpio_pu gpio_pd pwm spi pwm2 pruout pruin 
+    P9_29_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
+    P9_30_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
+    P9_31_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
+    # P9 31-40 Analog Signals, no pinmux
+    P9_41_pinmux : default gpio gpio_pu gpio_pd timer pruin 
+    P9_91_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
+    P9_42_pinmux : default gpio gpio_pu gpio_pd pwm uart spics spiclk 
+    P9_92_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
 
 You will need to reference the AM335x data sheet and Technical Reference
 Manual from TI to determine how to setup pin multiplexing for the
@@ -166,10 +179,4 @@ various special functions.  I find the following reference quite
 helpful, particularly the spreadsheet file:
 
 https://github.com/selsinork/beaglebone-black-pinmux
-
-Eventually, I hope to write a utility to handle setting up pin
-multiplexing for the various functions that will translate BeagleBone
-pin numbers to kernel gpio numbers for you and assist with multiplexing
-all signals required for those functions with multiple I/O pins, such
-as spi.
 
