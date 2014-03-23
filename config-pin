@@ -6,8 +6,8 @@ GPIODIR=/sys/class/gpio
 
 # Create mappings between BeagleBone header pins and kernel gpio
 # numbers.  These could be bash arrays or coded in python, but simple
-#  shell constructs so this code runs on a minimal system (including
-# the BusyBox ash shell in an initrd)
+# shell constructs are used so this code runs on a minimal system
+# (including the BusyBox shell in an initrd, ash, and dash)
 
 P8_03_GPIO="38"
 P8_04_GPIO="39"
