@@ -171,8 +171,14 @@
             /* P8_06 (ZCZ ball T8 ) emmc    */
 
             /* P8_07 (ZCZ ball R7 ) */
+            P8_07_default_pin: pinmux_P8_07_default_pin {
+                pinctrl-single,pins = <0x090  0x37>; };     /* Mode 7, Pull-Up, RxActive */
             P8_07_gpio_pin: pinmux_P8_07_gpio_pin {
-                pinctrl-single,pins = <0x090  0x67>; };     /* Mode 7, Pull-Up, RxActive */
+                pinctrl-single,pins = <0x090  0x2F>; };     /* Mode 7, RxActive */
+            P8_07_gpio_pu_pin: pinmux_P8_07_gpio_pu_pin {
+                pinctrl-single,pins = <0x090  0x37>; };     /* Mode 7, Pull-Up, RxActive */
+            P8_07_gpio_pd_pin: pinmux_P8_07_gpio_pd_pin {
+                pinctrl-single,pins = <0x090  0x27>; };     /* Mode 7, Pull-Down, RxActive */
             P8_07_timer_pin: pinmux_P8_07_timer_pin {
                 pinctrl-single,pins = <0x090  0x32>; };     /* Mode 2, Pull-Up, RxActive */
 
@@ -587,10 +593,12 @@
                 compatible = "bone-pinmux-helper";
                 status = "okay";
 
-                pinctrl-names = "default", "gpio", "timer";
-                pinctrl-0 = <&P8_07_gpio_pin>;
+                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd", "timer";
+                pinctrl-0 = <&P8_07_default_pin>;
                 pinctrl-1 = <&P8_07_gpio_pin>;
-                pinctrl-2 = <&P8_07_timer_pin>;
+                pinctrl-2 = <&P8_07_gpio_pu_pin>;
+                pinctrl-3 = <&P8_07_gpio_pd_pin>;
+                pinctrl-4 = <&P8_07_timer_pin>;
             };
 
             P8_08_pinmux {
