@@ -87,7 +87,7 @@ P9_92_GPIO="114"
 # P8_04_PINMUX="emmc"
 # P8_05_PINMUX="emmc"
 # P8_06_PINMUX="emmc"
-P8_07_PINMUX="default gpio timer"
+P8_07_PINMUX="default gpio gpio_pu gpio_pd timer"
 P8_08_PINMUX="default gpio timer"
 P8_09_PINMUX="default gpio timer"
 P8_10_PINMUX="default gpio timer"
@@ -169,24 +169,41 @@ usage () {
 	$NAME <pin> <mode>
 	    Set <pin> to <mode>, configuring pin multiplexing and optionally
 	    configuring the gpio.  Valid <mode> strings vary based on <pin>,
-	    however all pins have a default and gpio mode.  To setup gpio
-	    the following <mode> strings are all valid:
+	    however all pins have a default and gpio mode.  The default mode is
+	    the reset state of the pin, with the pin mux set to gpio, the pull
+	    up/down resistor set to it's reset value, and the pin receive buffer
+	    enabled.  To setup gpio, the following <mode> strings are all valid:
+
 	        gpio : 
-	            Set pinmux to gpio, gpio direction and value unchanged
+	            Set pinmux to gpio, existing direction and value unchanged
 	        in | input:
 	            Set pinmux to gpio and set gpio direction to input
 	        out | output :
 	            Set pinmux to gpio and set gpio direction to output
-	        high | 1 :
+	        hi | high | 1 :
 	            Set pinmux to gpio and set gpio direction to output driving high
-	        low | 0 :
+	        lo | low | 0 :
 	            Set pinmux to gpio and set gpio direction to output driving low
+
+	    To enable pull-up or pull-down resistors, a suffex may be appended to
+	    any of the above gpio modes.  Use + or _pu to enable the pull-up resistor
+	    and - or _pd to enable the pull-down resistor.  Examples:
+
+	        in+ | in_pu:
+	            Enable pull-up resistor and setup pin as per input, above.
+	        hi- | hi_pd:
+	            Enable pull-down resistor and setup pin as per high, above.
+	            While the pull-down resistor will be enabled, it will not do much
+	            until application software changes the pin direction to input.
+
 	$NAME -l <pin>
 	    list valid <mode> values for <pin>
+
 	$NAME -q <pin>
 	    query pin and report configuration details
+
 	$NAME -f [file]
-	    Read list of pin configurations from <file>, one per line
+	    Read list of pin configurations from file, one per line
 	    Comments and white-space are allowed
 	    With no file, or when file is -, read standard input.
 	
@@ -255,12 +272,24 @@ query_pin () {
 	for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
 		if [ -r $FILE ] ; then
 			read MODE JUNK < $FILE
-			echo "$PIN Mode: $MODE"
 		else
 			echo_err "Cannot read pinmux file: $FILE"
 			exit 1
 		fi
 	done	
+
+	case "$MODE" in
+	default|gpio*)
+		eval GPIO="\$${PIN}_GPIO"
+		FILE="$GPIODIR/gpio$GPIO/value"
+		read VALUE JUNK < $FILE
+		FILE="$GPIODIR/gpio$GPIO/direction"
+		read DIR JUNK < $FILE
+		echo "$PIN Mode: $MODE Direction: $DIR Value: $VALUE"
+		;;
+	*)	echo "$PIN Mode: $MODE"
+		;;
+	esac
 }
 
 # Configure a single pin
@@ -274,10 +303,60 @@ config_pin () {
 
 	case $2 in
 	# Map special GPIO setup modes to gpio with direction set
-	in|input)    MODE=gpio; DIR=in   ;;
-	out|output)  MODE=gpio; DIR=out  ;;
-	low|0)       MODE=gpio; DIR=low  ;;
-	high|1)      MODE=gpio; DIR=high ;;
+
+	# GPIO with pull-up/down disabled
+	[iI][nN]|[iI][nN][pP][uU][tT])
+		MODE=gpio;
+		DIR=in
+		;;
+	[oO][uU][tT]|[oO][uU][tT][pP][uU][tT])
+		MODE=gpio;
+		DIR=out
+		;;
+	[lL][oO]|[lL][oO][wW]|0)
+		MODE=gpio;
+		DIR=low
+		;;
+	[hH][iI]|[hH][iI][gG][hH]|1)
+		MODE=gpio;
+		DIR=high
+		;;
+
+	# GPIO with pull-down enabled
+	[iI][nN]-|[iI][nN][pP][uU][tT]-|[iI][nN][-_][pP][uU]|[iI][nN][pP][dD][tT][-_][pP][dD])
+		MODE=gpio_pd;
+		DIR=in
+		;;
+	[oO][uU][tT]-|[oO][uU][tT][pP][uU][tT]-|[oO][uU][tT][-_][pP][dD]|[oO][uU][tT][pP][uU][tT][-_][pP][dD])
+		MODE=gpio_pd;
+		DIR=out
+		;;
+	[lL][oO]-|[lL][oO][wW]-|0-|[lL][oO][-_][pP][dD]|[lL][oO][wW][-_][pP][dD]|0[-_][pP][dD])
+		MODE=gpio_pd;
+		DIR=low
+		;;
+	[hH][iI]-|[hH][iI][gG][hH]-|1-|[hH][iI][-_][pP][dD]|[hH][iI][gG][hH][-_][pP][dD]|1[-_][pP][dD])
+		MODE=gpio_pd;
+		DIR=high
+		;;
+
+	# GPIO with pull-up enabled
+	[iI][nN]+|[iI][nN][pP][uU][tT]+|[iI][nN][-_][pP][uU]|[iI][nN][pP][uU][tT][-_][pP][uU])
+		MODE=gpio_pu;
+		DIR=in
+		;;
+	[oO][uU][tT]+|[oO][uU][tT][pP][uU][tT]+|[oO][uU][tT][-_][pP][uU]|[oO][uU][tT][pP][uU][tT][-_][pP][uU])
+		MODE=gpio_pu;
+		DIR=out
+		;;
+	[lL][oO]+|[lL][oO][wW]+|0+|[lL][oO][-_][pP][uU]|[lL][oO][wW][-_][pP][uU]|0[-_][pP][uU])
+		MODE=gpio_pu;
+		DIR=low
+		;;
+	[hH][iI]+|[hH][iI][gG][hH]+|1+|[hH][iI][-_][pP][uU]|[hH][iI][gG][hH][-_][pP][uU]|1[-_][pP][uU])
+		MODE=gpio_pd;
+		DIR=high
+		;;
 
 	# Check to make sure the provided mode is legal
 	*)  MODE="$2"; DIR=""
