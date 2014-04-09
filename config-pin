@@ -9,153 +9,581 @@ GPIODIR=/sys/class/gpio
 # shell constructs are used so this code runs on a minimal system
 # (including the BusyBox shell in an initrd, ash, and dash)
 
+# PIN: function when no cape is loaded
+# PINMUX: pin multiplexer functions when cape is loaded
+# INFO: information to pin functions, starts with information for PIN and then PINMUX
+# CAPE: cape that enables pinmuxing for specific pin, if no cape is set the pin is not modifyable
+# GPIO: kernel GPIO pin number
+# PRU: PRU pin number
+
+P8_01_PIN="gnd"
+P8_01_INFO="GND"
+P8_01_CAPE=""
+
+P8_02_PIN="gnd"
+P8_02_INFO="GND"
+P8_02_CAPE=""
+
+P8_03_PRU="70"
 P8_03_GPIO="38"
-P8_04_GPIO="39"
-P8_05_GPIO="34"
-P8_06_GPIO="35"
-P8_07_GPIO="66"
-P8_08_GPIO="67"
-P8_09_GPIO="69"
-P8_10_GPIO="68"
-P8_11_GPIO="45"
-P8_12_GPIO="44"
-P8_13_GPIO="23"
-P8_14_GPIO="26"
-P8_15_GPIO="47"
-P8_16_GPIO="46"
-P8_17_GPIO="27"
-P8_18_GPIO="65"
-P8_19_GPIO="22"
-P8_20_GPIO="63"
-P8_21_GPIO="62"
-P8_22_GPIO="37"
-P8_23_GPIO="36"
-P8_24_GPIO="33"
-P8_25_GPIO="32"
-P8_26_GPIO="61"
-P8_27_GPIO="86"
-P8_28_GPIO="88"
-P8_29_GPIO="87"
-P8_30_GPIO="89"
-P8_31_GPIO="10"
-P8_32_GPIO="11"
-P8_33_GPIO="9"
-P8_34_GPIO="81"
-P8_35_GPIO="8"
-P8_36_GPIO="80"
-P8_37_GPIO="78"
-P8_38_GPIO="79"
-P8_39_GPIO="76"
-P8_40_GPIO="77"
-P8_41_GPIO="74"
-P8_42_GPIO="75"
-P8_43_GPIO="72"
-P8_44_GPIO="73"
-P8_45_GPIO="70"
-P8_46_GPIO="71"
-
-P9_11_GPIO="30"
-P9_12_GPIO="60"
-P9_13_GPIO="31"
-P9_14_GPIO="50"
-P9_15_GPIO="48"
-P9_16_GPIO="51"
-P9_17_GPIO="5"
-P9_18_GPIO="4"
-P9_19_GPIO="13"
-P9_20_GPIO="12"
-P9_21_GPIO="3"
-P9_22_GPIO="2"
-P9_23_GPIO="49"
-P9_24_GPIO="15"
-P9_25_GPIO="117"
-P9_26_GPIO="14"
-P9_27_GPIO="115"
-P9_28_GPIO="113"
-P9_29_GPIO="111"
-P9_30_GPIO="112"
-P9_31_GPIO="110"
-
-P9_41_GPIO="20"
-P9_91_GPIO="116"
-P9_42_GPIO="7"
-P9_92_GPIO="114"
-
-# Create list of valid pinmux entries for each header pin
-
+P8_03_PIN="emmc"
 P8_03_PINMUX="default gpio gpio_pu gpio_pd"
-P8_04_PINMUX="default gpio gpio_pu gpio_pd"
-P8_05_PINMUX="default gpio gpio_pu gpio_pd"
-P8_06_PINMUX="default gpio gpio_pu gpio_pd"
-P8_07_PINMUX="default gpio gpio_pu gpio_pd timer"
-P8_08_PINMUX="default gpio gpio_pu gpio_pd timer"
-P8_09_PINMUX="default gpio gpio_pu gpio_pd timer"
-P8_10_PINMUX="default gpio gpio_pu gpio_pd timer"
-P8_11_PINMUX="default gpio gpio_pu gpio_pd pruout qep"
-P8_12_PINMUX="default gpio gpio_pu gpio_pd pruout qep"
-P8_13_PINMUX="default gpio gpio_pu gpio_pd pwm"
-P8_14_PINMUX="default gpio gpio_pu gpio_pd pwm"
-P8_15_PINMUX="default gpio gpio_pu gpio_pd pruin qep"
-P8_16_PINMUX="default gpio gpio_pu gpio_pd pruin qep"
-P8_17_PINMUX="default gpio gpio_pu gpio_pd pwm"
-P8_18_PINMUX="default gpio gpio_pu gpio_pd"
-P8_19_PINMUX="default gpio gpio_pu gpio_pd pwm"
-P8_20_PINMUX="default gpio gpio_pu gpio_pd pruout pruin"
-P8_21_PINMUX="default gpio gpio_pu gpio_pd pruout pruin"
-P8_22_PINMUX="default gpio gpio_pu gpio_pd"
-P8_23_PINMUX="default gpio gpio_pu gpio_pd"
-P8_24_PINMUX="default gpio gpio_pu gpio_pd"
-P8_25_PINMUX="default gpio gpio_pu gpio_pd"
-P8_26_PINMUX="default gpio gpio_pu gpio_pd"
-# P8_27_PINMUX="hdmi"
-# P8_28_PINMUX="hdmi"
-# P8_29_PINMUX="hdmi"
-# P8_30_PINMUX="hdmi"
-# P8_31_PINMUX="hdmi"
-# P8_32_PINMUX="hdmi"
-# P8_33_PINMUX="hdmi"
-# P8_34_PINMUX="hdmi"
-# P8_35_PINMUX="hdmi"
-# P8_36_PINMUX="hdmi"
-# P8_37_PINMUX="hdmi"
-# P8_38_PINMUX="hdmi"
-# P8_39_PINMUX="hdmi"
-# P8_40_PINMUX="hdmi"
-# P8_41_PINMUX="hdmi"
-# P8_42_PINMUX="hdmi"
-# P8_43_PINMUX="hdmi"
-# P8_44_PINMUX="hdmi"
-# P8_45_PINMUX="hdmi"
-# P8_46_PINMUX="hdmi"
+P8_03_INFO="mmc1_dat6 default gpio1_6,pru:70 gpio1_6 gpio1_6"
+P8_03_CAPE="cape-univ-emmc"
 
+P8_04_PRU="71"
+P8_04_GPIO="39"
+P8_04_PIN="emmc"
+P8_04_PINMUX="default gpio gpio_pu gpio_pd"
+P8_04_INFO="mmc1_dat7 default gpio1_7,pru:71 gpio1_7 gpio1_7"
+P8_04_CAPE="cape-univ-emmc"
+
+P8_05_PRU="66"
+P8_05_GPIO="34"
+P8_05_PIN="emmc"
+P8_05_PINMUX="default gpio gpio_pu gpio_pd"
+P8_05_INFO="mmc1_dat2 default gpio1_2,pru:66 gpio1_2 gpio1_2"
+P8_05_CAPE="cape-univ-emmc"
+
+P8_06_PRU="67"
+P8_06_GPIO="35"
+P8_06_PIN="emmc"
+P8_06_PINMUX="default gpio gpio_pu gpio_pd"
+P8_06_INFO="mmc1_dat3 default gpio1_3,pru:67 gpio1_3 gpio1_3"
+P8_06_CAPE="cape-univ-emmc"
+
+P8_07_PRU="98"
+P8_07_GPIO="66"
+P8_07_PIN="gpio"
+P8_07_PINMUX="default gpio gpio_pu gpio_pd timer"
+P8_07_INFO="gio2_2 default gpio2_2,pru:98 gpio2_2 gpio2_2 timer4"
+P8_07_CAPE="cape-universal"
+
+P8_08_PRU="99"
+P8_08_GPIO="67"
+P8_08_PIN="gpio"
+P8_08_PINMUX="default gpio gpio_pu gpio_pd timer"
+P8_08_INFO="gpio2_3 default gpio2_3,pru:99 gpio2_3 gpio2_3 timer7"
+P8_08_CAPE="cape-universal"
+
+P8_09_PRU="101"
+P8_09_GPIO="69"
+P8_09_PIN="gpio"
+P8_09_PINMUX="default gpio gpio_pu gpio_pd timer"
+P8_09_INFO="gpio2_5 default gpio2_5,pru:101 gpio2_5 gpio2_5 timer5"
+P8_09_CAPE="cape-universal"
+
+P8_10_PRU="100"
+P8_10_GPIO="68"
+P8_10_PIN="gpio"
+P8_10_PINMUX="default gpio gpio_pu gpio_pd timer"
+P8_10_INFO="gpio2_4 default gpio2_4,pru:100 gpio2_4 gpio2_4 timer6"
+P8_10_CAPE="cape-universal"
+
+P8_11_PRU="77"
+P8_11_GPIO="45"
+P8_11_PIN="gpio"
+P8_11_PINMUX="default gpio gpio_pu gpio_pd pruout qep"
+P8_11_INFO="gpio1_13 default gpio1_13,pru:77 gpio1_13 gpio1_13 pr1_pru0_pru_r30_15 eQEP2B_in"
+P8_11_CAPE="cape-universal"
+
+P8_12_PRU="76"
+P8_12_GPIO="44"
+P8_12_PIN="gpio"
+P8_12_PINMUX="default gpio gpio_pu gpio_pd pruout qep"
+P8_12_INFO="gpio1_12 default gpio1_12,pru:76 gpio1_12 gpio1_12 pr1_pru0_pru_r30_14 eQEP2A_in"
+P8_12_CAPE="cape-universal"
+
+P8_13_PRU="55"
+P8_13_GPIO="23"
+P8_13_PIN="gpio"
+P8_13_PINMUX="default gpio gpio_pu gpio_pd pwm"
+P8_13_INFO="gpio0_23 default gpio0_23,pru:55 gpio0_23 gpio0_23 ehrpwm2B"
+P8_13_CAPE="cape-universal"
+
+P8_14_PRU="58"
+P8_14_GPIO="26"
+P8_14_PIN="gpio"
+P8_14_PINMUX="default gpio gpio_pu gpio_pd pwm"
+P8_14_INFO="gpio0_26 default gpio0_26,pru:58 gpio0_26 gpio0_26 ehrpwm2_tripzone_input"
+P8_14_CAPE="cape-universal"
+
+P8_15_PRU="79"
+P8_15_GPIO="47"
+P8_15_PIN="gpio"
+P8_15_PINMUX="default gpio gpio_pu gpio_pd pruin qep"
+P8_15_INFO="gpio1_15 default gpio1_15,pru:79 gpio1_15 gpio1_15 pr1_pru0_pru_r31_15 eQEP2_strobe"
+P8_15_CAPE="cape-universal"
+
+P8_16_PRU="78"
+P8_16_GPIO="46"
+P8_16_PIN="gpio"
+P8_16_PINMUX="default gpio gpio_pu gpio_pd pruin qep"
+P8_16_INFO="gpio1_14 default gpio1_14,pru:78 gpio1_14 gpio1_14 pr1_pru0_pru_r31_14 eQEP2_index"
+P8_16_CAPE="cape-universal"
+
+P8_17_PRU="59"
+P8_17_GPIO="27"
+P8_17_PIN="gpio"
+P8_17_PINMUX="default gpio gpio_pu gpio_pd pwm"
+P8_17_INFO="gpio0_27 default gpio0_27,pru:59 gpio0_27 gpio0_27 ehrpwm0_synco"
+P8_17_CAPE="cape-universal"
+
+P8_18_PRU="97"
+P8_18_GPIO="65"
+P8_18_PIN="gpio"
+P8_18_PINMUX="default gpio gpio_pu gpio_pd"
+P8_18_INFO="gpio2_1 default gpio2_1,pru:97 gpio2_1 gpio2_1"
+P8_18_CAPE="cape-universal"
+
+P8_19_PRU="54"
+P8_19_GPIO="22"
+P8_19_PIN="gpio"
+P8_19_PINMUX="default gpio gpio_pu gpio_pd pwm"
+P8_19_INFO="gpio0_22 default gpio0_22,pru:54 gpio0_22 gpio0_22 ehrpwm2A"
+P8_19_CAPE="cape-universal"
+
+P8_20_PRU="95"
+P8_20_GPIO="63"
+P8_20_PIN="emmc"
+P8_20_PINMUX="default gpio gpio_pu gpio_pd pruout pruin"
+P8_20_INFO="mmc1_cmd default gpio1_31,pru:95 gpio1_31 gpio1_31 pr1_pru1_pru_r30_13 pr1_pru1_pru_r31_13"
+P8_20_CAPE="cape-univ-emmc"
+
+P8_21_PRU="94"
+P8_21_GPIO="62"
+P8_21_PIN="emmc"
+P8_21_PINMUX="default gpio gpio_pu gpio_pd pruout pruin"
+P8_21_INFO="mmc1_clk default gpio1_30,pru:94 gpio1_30 gpio1_30 pr1_pru1_pru_r30_12 pr1_pru1_pru_r31_12"
+P8_21_CAPE="cape-univ-emmc"
+
+P8_22_PRU="69"
+P8_22_GPIO="37"
+P8_22_PIN="emmc"
+P8_22_PINMUX="default gpio gpio_pu gpio_pd"
+P8_22_INFO="mmc1_dat5 default gpio1_5,pru:69 gpio1_5 gpio1_5"
+P8_22_CAPE="cape-univ-emmc"
+
+P8_23_PRU="68"
+P8_23_GPIO="36"
+P8_23_PIN="emmc"
+P8_23_PINMUX="default gpio gpio_pu gpio_pd"
+P8_23_INFO="mmc1_dat4 default gpio1_4,pru:68 gpio1_4 gpio1_4"
+P8_23_CAPE="cape-univ-emmc"
+
+P8_24_PRU="65"
+P8_24_GPIO="33"
+P8_24_PIN="emmc"
+P8_24_PINMUX="default gpio gpio_pu gpio_pd"
+P8_24_INFO="mmc1_dat1 default gpio1_1,pru:65 gpio1_1 gpio1_1"
+P8_24_CAPE="cape-univ-emmc"
+
+P8_25_PRU="64"
+P8_25_GPIO="32"
+P8_25_PIN="emmc"
+P8_25_PINMUX="default gpio gpio_pu gpio_pd"
+P8_25_INFO="mmc1_dat0 default gpio1_0,pru:64 gpio1_0 gpio1_0"
+P8_25_CAPE="cape-univ-emmc"
+
+P8_26_PRU="93"
+P8_26_GPIO="61"
+P8_26_PIN="gpio"
+P8_26_PINMUX="default gpio gpio_pu gpio_pd"
+P8_26_INFO="gpio1_29 default gpio1_29,pru:93 gpio1_29 gpio1_29"
+P8_26_CAPE="cape-universal"
+
+P8_27_PRU="118"
+P8_27_GPIO="86"
+P8_27_PIN="hdmi"
+P8_27_INFO="lcd_vsync"
+P8_27_CAPE=""
+
+P8_28_PRU="120"
+P8_28_GPIO="88"
+P8_28_PIN="hdmi"
+P8_28_INFO="lcd_pclk"
+P8_28_CAPE=""
+
+P8_29_PRU="119"
+P8_29_GPIO="87"
+P8_29_PIN="hdmi"
+P8_29_INFO="lcd_hsync"
+P8_29_CAPE=""
+
+P8_30_PRU="121"
+P8_30_GPIO="89"
+P8_30_PIN="hdmi"
+P8_30_INFO="lcd_ac_bias_en"
+P8_30_CAPE=""
+
+P8_31_PRU="42"
+P8_31_GPIO="10"
+P8_31_PIN="hdmi"
+P8_31_INFO="lcd_data14"
+P8_31_CAPE=""
+
+P8_32_PRU="43"
+P8_32_GPIO="11"
+P8_32_PIN="hdmi"
+P8_32_INFO="lcd_data15"
+P8_32_CAPE=""
+
+P8_33_PRU="41"
+P8_33_GPIO="9"
+P8_33_PIN="hdmi"
+P8_33_INFO="lcd_data13"
+P8_33_CAPE=""
+
+P8_34_PRU="113"
+P8_34_GPIO="81"
+P8_34_PIN="hdmi"
+P8_34_INFO="lcd_data11"
+P8_34_CAPE=""
+
+P8_35_PRU="40"
+P8_35_GPIO="8"
+P8_35_PIN="hdmi"
+P8_35_INFO="lcd_data12"
+P8_35_CAPE=""
+
+P8_36_PRU="112"
+P8_36_GPIO="80"
+P8_36_PIN="hdmi"
+P8_36_INFO="lcd_data10"
+P8_36_CAPE=""
+
+P8_37_PRU="110"
+P8_37_GPIO="78"
+P8_37_PIN="hdmi"
+P8_37_INFO="lcd_data8"
+P8_37_CAPE=""
+
+P8_38_PRU="111"
+P8_38_GPIO="79"
+P8_38_PIN="hdmi"
+P8_38_INFO="lcd_data9"
+P8_38_CAPE=""
+
+P8_39_PRU="108"
+P8_39_GPIO="76"
+P8_39_PIN="hdmi"
+P8_39_INFO="lcd_data6"
+P8_39_CAPE=""
+
+P8_40_PRU="109"
+P8_40_GPIO="77"
+P8_40_PIN="hdmi"
+P8_40_INFO="lcd_data7"
+P8_40_CAPE=""
+
+P8_41_PRU="106"
+P8_41_GPIO="74"
+P8_41_PIN="hdmi"
+P8_41_INFO="lcd_data4"
+P8_41_CAPE=""
+
+P8_42_PRU="107"
+P8_42_GPIO="75"
+P8_42_PIN="hdmi"
+P8_42_INFO="lcd_data5"
+P8_42_CAPE=""
+
+P8_43_PRU="104"
+P8_43_GPIO="72"
+P8_43_PIN="hdmi"
+P8_43_INFO="lcd_data2"
+P8_43_CAPE=""
+
+P8_44_PRU="105"
+P8_44_GPIO="73"
+P8_44_PIN="hdmi"
+P8_44_INFO="lcd_data3"
+P8_44_CAPE=""
+
+P8_45_PRU="102"
+P8_45_GPIO="70"
+P8_45_PIN="hdmi"
+P8_45_INFO="lcd_data0"
+P8_45_CAPE=""
+
+P8_46_PRU="103"
+P8_46_GPIO="71"
+P8_46_PIN="hdmi"
+P8_46_INFO="lcd_data1"
+P8_46_CAPE=""
+
+P9_01_PIN="gnd"
+P9_01_INFO="GND"
+P9_01_CAPE=""
+
+P9_02_PIN="gnd"
+P9_02_INFO="GND"
+P9_02_CAPE=""
+
+P9_03_PIN="power"
+P9_03_INFO="3V3"
+P9_03_CAPE=""
+
+P9_04_PIN="power"
+P9_04_INFO="3V3"
+P9_04_CAPE=""
+
+P9_05_PIN="power"
+P9_05_INFO="VDD_5V"
+P9_05_CAPE=""
+
+P9_06_PIN="power"
+P9_06_INFO="VDD_5V"
+P9_06_CAPE=""
+
+P9_07_PIN="power"
+P9_07_INFO="SYS_5V"
+P9_07_CAPE=""
+
+P9_08_PIN="power"
+P9_08_INFO="SYS_5V"
+P9_08_CAPE=""
+
+P9_09_PIN="system"
+P9_09_INFO="PWR_BUT"
+P9_09_CAPE=""
+
+P9_10_PIN="system"
+P9_10_INFO="RSTn"
+P9_10_CAPE=""
+
+P9_11_PRU="62"
+P9_11_GPIO="30"
+P9_11_PIN="gpio"
 P9_11_PINMUX="default gpio gpio_pu gpio_pd uart"
+P9_11_INFO="gpio0_30 default gpio0_30,pru:62 gpio0_30 gpio0_30 uart4_rxd"
+P9_11_CAPE="cape-universal"
+
+P9_12_PRU="92"
+P9_12_GPIO="60"
+P9_12_PIN="gpio"
 P9_12_PINMUX="default gpio gpio_pu gpio_pd"
+P9_12_INFO="gpio1_28 default gpio1_28,pru:92 gpio1_28 gpio1_28"
+P9_12_CAPE="cape-universal"
+
+P9_13_PRU="63"
+P9_13_GPIO="31"
+P9_13_PIN="gpio"
 P9_13_PINMUX="default gpio gpio_pu gpio_pd uart"
+P9_13_INFO="gpio0_31 default gpio0_31,pru:63 gpio0_31 gpio0_31 uart4_txd"
+P9_13_CAPE="cape-universal"
+
+P9_14_PRU="82"
+P9_14_GPIO="50"
+P9_14_PIN="gpio"
 P9_14_PINMUX="default gpio gpio_pu gpio_pd pwm"
+P9_14_INFO="gpio1_18 default gpio1_18,pru:82 gpio1_18 gpio1_18 ehrpwm1A"
+P9_14_CAPE="cape-universal"
+
+P9_15_PRU="80"
+P9_15_GPIO="48"
+P9_15_PIN="gpio"
 P9_15_PINMUX="default gpio gpio_pu gpio_pd pwm"
+P9_15_INFO="gpio1_16 default gpio1_16,pru:80 gpio1_16 gpio1_16 ehrpwm1_tripzone_input"
+P9_15_CAPE="cape-universal"
+
+P9_16_PRU="83"
+P9_16_GPIO="51"
+P9_16_PIN="gpio"
 P9_16_PINMUX="default gpio gpio_pu gpio_pd pwm"
+P9_16_INFO="gpio1_19 default gpio1_19,pru:83 gpio1_19 gpio1_19 ehrpwm1B"
+P9_16_CAPE="cape-universal"
+
+P9_17_PRU="37"
+P9_17_GPIO="5"
+P9_17_PIN="gpio"
 P9_17_PINMUX="default gpio gpio_pu gpio_pd spi i2c pwm"
+P9_17_INFO="gpio0_5 default gpio0_5,pru:37 gpio0_5 gpio0_5 spi0_cs0 i2c1_scl"
+P9_17_CAPE="cape-universal"
+
+P9_18_PRU="36"
+P9_18_GPIO="4"
+P9_18_PIN="gpio"
 P9_18_PINMUX="default gpio gpio_pu gpio_pd spi i2c pwm"
-# P9_19_PINMUX="cape_i2c"
-# P9_20_PINMUX="cape_i2c"
+P9_18_INFO="gpio0_4 default gpio0_4,pru:36 gpio0_4 gpio0_4 spi0_d1 i2c1_sda"
+P9_18_CAPE="cape-universal"
+
+P9_19_PRU="45"
+P9_19_GPIO="13"
+P9_19_PIN="cape_i2c"
+P9_19_INFO="i2c"
+P9_19_CAPE=""
+
+P9_20_PRU="44"
+P9_20_GPIO="12"
+P9_20_PIN="cape_i2c"
+P9_20_INFO="i2c"
+P9_20_CAPE=""
+
+P9_21_PRU="35"
+P9_21_GPIO="3"
+P9_21_PIN="gpio"
 P9_21_PINMUX="default gpio gpio_pu gpio_pd spi uart i2c pwm"
+P9_21_INFO="default gpio0_3,pru:35 gpio0_3 gpio0_3 spi0_d0 uart2_txd i2c2_scl ehrpwm0B"
+P9_21_CAPE="cape-universal"
+
+P9_22_PRU="34"
+P9_22_GPIO="2"
+P9_22_PIN="gpio"
 P9_22_PINMUX="default gpio gpio_pu gpio_pd spi uart i2c pwm"
+P9_22_INFO="gpio0_2 default gpio0_2,pru:36 gpio0_2 gpio0_2 spi0_sclk uart2_rxd i2c2_sda ehrpwm0A"
+P9_22_CAPE="cape-universal"
+
+
+P9_23_PRU="81"
+P9_23_GPIO="49"
+P9_23_PIN="gpio"
 P9_23_PINMUX="default gpio gpio_pu gpio_pd pwm"
+P9_23_INFO="gpio1_17 default gpio1_17,pru:81 gpio1_17 gpio1_17 ehrpwm0_synco"
+P9_23_CAPE="cape-universal"
+
+P9_24_PRU="47"
+P9_24_GPIO="15"
+P9_24_PIN="gpio"
 P9_24_PINMUX="default gpio gpio_pu gpio_pd uart can i2c pruin"
+P9_24_INFO="gpio0_15 default gpio0_15,pru:47 gpio0_15 gpio0_15 uart1_txd dcan1_rx i2c1_scl pr1_pru0_pru_r31_16"
+P9_24_CAPE="cape-universal"
+
+P9_25_PRU="149"
+P9_25_GPIO="117"
+P9_25_PIN="gpio"
 P9_25_PINMUX="default gpio gpio_pu gpio_pd qep pruout pruin"
+P9_25_INFO="gpio3_21 default gpio3_21,pru:149 gpio3_21 gpio3_21 eQEP0_strobe pr1_pru0_pru_r30_7 pr1_pru0_pru_r31_7"
+P9_25_CAPE="cape-universal"
+
+P9_26_PRU="46"
+P9_26_GPIO="14"
+P9_26_PIN="gpio"
 P9_26_PINMUX="default gpio gpio_pu gpio_pd uart can i2c pruin"
+P9_26_INFO="gpio0_14 default gpio0_14,pru:46 gpio0_14 gpio0_14 uart1_rxd dcan1_tx i2c1_sda pr1_pru1_pru_r31_16"
+P9_26_CAPE="cape-universal"
+
+P9_27_PRU="147"
+P9_27_GPIO="115"
+P9_27_PIN="gpio"
 P9_27_PINMUX="default gpio gpio_pu gpio_pd qep pruout pruin"
+P9_27_INFO="gpio3_19 default gpio3_19,pru:147 gpio3_19 gpio3_19 eQEP0b_in pr1_pru0_pru_r30_5 pr1_pru0_pru_r31_5"
+P9_27_CAPE="cape-universal"
+
+P9_28_PRU="145"
+P9_28_GPIO="113"
+P9_28_PIN="gpio"
 P9_28_PINMUX="default gpio gpio_pu gpio_pd pwm spi pwm2 pruout pruin"
+P9_28_INFO="gpio3_17 default gpio3_17,pru:145 gpio3_17 gpio3_17 ehrpwm0_synci spi1_cs0 eCAP2_in_PWM2_out pr1_pru0_pru_r30_3 pr1_pru0_pru_r31_3"
+P9_28_CAPE="cape-universal"
+
+P9_29_PRU="143"
+P9_29_GPIO="111"
+P9_29_PIN="gpio"
 P9_29_PINMUX="default gpio gpio_pu gpio_pd pwm spi pruout pruin"
+P9_29_INFO="gpio3_15 default gpio3_15,pru:143 gpio3_15 gpio3_15 ehrpwm0B spi1_d0 pr1_pru0_pru_r30_1 pr1_pru0_pru_r31_1"
+P9_29_CAPE="cape-universal"
+
+P9_30_PRU="144"
+P9_30_GPIO="112"
+P9_30_PIN="gpio"
 P9_30_PINMUX="default gpio gpio_pu gpio_pd pwm spi pruout pruin"
-# P9 31-40 Analog In, no pinmux
+P9_30_INFO="gpio3_16 default gpio3_16,pru:144 gpio3_16 gpio3_16 ehrpwm0_tripzone_input spi1_d1 pr1_pru0_pru_r30_2 pr1_pru0_pru_r31_2"
+P9_30_CAPE="cape-universal"
+
+P9_31_PRU="142"
+P9_31_GPIO="110"
+P9_31_PIN="gpio"
 P9_31_PINMUX="default gpio gpio_pu gpio_pd pwm spi pruout pruin"
+P9_31_INFO="gpio3_14 default gpio3_14,pru:142 gpio3_14 gpio3_14 ehrpwm0A spi1_sclk pr1_pru0_pru_r30_0 pr1_pru0_pru_r31_0"
+P9_31_CAPE="cape-universal"
+
+P9_32_PIN="power"
+P9_32_INFO="VADC"
+P9_32_CAPE=""
+
+P9_33_PIN="adc"
+P9_33_INFO="AIN4"
+P9_33_CAPE=""
+
+P9_34_PIN="gnd"
+P9_34_INFO="AGND"
+P9_34_CAPE=""
+
+P9_35_PIN="adc"
+P9_35_INFO="AIN6"
+P9_35_CAPE=""
+
+P9_36_PIN="adc"
+P9_36_INFO="AIN5"
+P9_36_CAPE=""
+
+P9_37_PIN="adc"
+P9_37_INFO="AIN2"
+P9_37_CAPE=""
+
+P9_38_PIN="adc"
+P9_38_INFO="AIN3"
+P9_38_CAPE=""
+
+P9_39_PIN="adc"
+P9_39_INFO="AIN0"
+P9_39_CAPE=""
+
+P9_40_PIN="adc"
+P9_40_INFO="AIN1"
+P9_40_CAPE=""
+
+P9_41_PRU="52"
+P9_41_GPIO="20"
+P9_41_PIN="gpio"
 P9_41_PINMUX="default gpio gpio_pu gpio_pd timer pruin"
+P9_41_INFO="gpio0_20 default gpio0_20,pru:52 gpio0_20 gpio0_20 timer7 pr1_pru0_pru_r31_16"
+P9_41_CAPE="cape-universal"
+
+P9_91_PRU="148"
+P9_91_GPIO="116"
+P9_91_PIN="gpio"
 P9_91_PINMUX="default gpio gpio_pu gpio_pd qep pruout pruin"
+P9_91_INFO="gpio3_20 default gpio3_20,pru:148 gpio3_20 gpio3_20 eQEP0_index pr1_pru0_pru_r30_6 pr1_pru0_pru_r31_6"
+P9_91_CAPE="cape-universal"
+
+P9_42_PRU="39"
+P9_42_GPIO="7"
+P9_42_PIN="gpio"
 P9_42_PINMUX="default gpio gpio_pu gpio_pd pwm uart spics spiclk"
+P9_42_INFO="gpio0_7 default gpio0_7,pru:39 gpio0_7 gpio0_7 eCAP0_in_PWM0_out uart3_txd spi1_cs1 spi1_sclk"
+P9_42_CAPE="cape-universal"
+
+P9_92_PRU="146"
+P9_92_GPIO="114"
+P9_92_PIN="gpio"
 P9_92_PINMUX="default gpio gpio_pu gpio_pd qep pruout pruin"
+P9_92_INFO="gpio3_18 default gpio3_18,pru:146 gpio3_18 gpio3_18 eQEP0A_in pr1_pru0_pru_r30_4 pr1_pru0_pru_r31_4"
+P9_92_CAPE="cape-universal"
+
+P9_43_PIN="gnd"
+P9_43_INFO="GND"
+P9_43_CAPE=""
+
+P9_44_PIN="gnd"
+P9_44_INFO="GND"
+P9_44_CAPE=""
+
+P9_45_PIN="gnd"
+P9_45_INFO="GND"
+P9_45_CAPE=""
+
+P9_46_PIN="gnd"
+P9_46_INFO="GND"
+P9_46_CAPE=""
+
 
 echo_err () {
+	echo "$@" 1>&2
+}
+
+echo_std () {
 	echo "$@" 1>&2
 }
 
@@ -166,7 +594,7 @@ echo_dbg () {
 usage () {
 	NAME="$(basename $0)"
 	cat <<- EOF
-	$NAME <pin> <mode>
+	$NAME [-a] <pin> <mode>
 	    Set <pin> to <mode>, configuring pin multiplexing and optionally
 	    configuring the gpio.  Valid <mode> strings vary based on <pin>,
 	    however all pins have a default and gpio mode.  The default mode is
@@ -196,8 +624,16 @@ usage () {
 	            While the pull-down resistor will be enabled, it will not do much
 	            until application software changes the pin direction to input.
 
+	    -a automatically loads missing device tree overlays
+
+	$NAME overlay <name>
+	    loads the device tree overlay <name>
+
 	$NAME -l <pin>
 	    list valid <mode> values for <pin>
+
+	$NAME -i <pin>
+	    show information to <pin>
 
 	$NAME -q <pin>
 	    query pin and report configuration details
@@ -250,23 +686,94 @@ fixup_pin () {
 	echo $PIN
 }
 
-# List the legal mode values for a pin
+# Be friendly about overlay naming conventions
+# $1 = Overlay name
+fixup_overlay () {
+	case "$1" in
+	[oO][vV]|[oO][vV][eE][rR][lL][aA][yY])
+		echo "1"
+		;;
+	[cC][aA][pP][eE])
+		echo "1"
+		;;
+	*)  echo "0"
+		;;
+	esac
+}
+
+# List the default mode value
 # $1 = Pin Name
-listmodes () {
+listmode () {
 	PIN=$(fixup_pin $1)
-	eval MODES="\$${PIN}_PINMUX"
+	eval MODES="\$${PIN}_PIN"
 	if [ -z "$MODES" ] ; then
-		echo_err "Unknown pin: $1"
+		echo_err "Unknown pin name: $1"
 		exit 1
 	else
 		echo "$MODES"
 	fi
 }
 
+# List the legal mode values for a pin
+# $1 = Pin Name
+listmodes () {
+	PIN=$(fixup_pin $1)
+	eval MODES="\$${PIN}_PINMUX"
+	eval INFO="\$${PIN}_INFO"
+	if [ -z "$MODES" ] ; then
+		echo_err "Pin is not modifyable: $1 $INFO"
+		exit 1
+	else
+		echo "$MODES"
+	fi
+}
+
+# List the capes for a pin
+# $1 = Pin Name
+listcape () {
+	PIN=$(fixup_pin $1)
+	eval CAPE="\$${PIN}_CAPE"
+	if [ -z "$CAPE" ] ; then
+		echo_err "Pin has no cape: $1"
+		exit 1
+	else
+		echo "$CAPE"
+	fi
+}
+
+# List info for a pin
+# $1 = Pin Name
+listinfo () {
+	PIN=$(fixup_pin $1)
+	eval INFO="\$${PIN}_INFO"
+	echo "$INFO"
+}
+
+# List the kernel GPIO id for a pin
+# $1 = Pin Name
+listgpio () {
+	PIN=$(fixup_pin $1)
+	eval GPIO="\$${PIN}_GPIO"
+	echo "$GPIO"
+}
+
+# List ther PRU GPIO id for a pin
+# $1 = Pin Name
+listpru () {
+	PIN=$(fixup_pin $1)
+	eval PRU="\$${PIN}_PRU"
+	echo "$PRU"
+}
+
 # List current pin settings
 # $1 = Pin name
 query_pin () {
+	set -e
 	PIN=$(fixup_pin $1)
+	MODES="$(listmodes $PIN)"
+	CAPE="$(listcape $PIN)"
+
+	check_cape $CAPE
 
 	# Expand filename using shell globbing
 	for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
@@ -292,113 +799,147 @@ query_pin () {
 	esac
 }
 
+# Show information to a specific pin
+# $1 = Pin name
+show_pin () {
+	set -e
+	PIN=$(fixup_pin $1)
+	MODE="$(listmode $PIN)"
+	MODES="$(listmodes $PIN)"
+	CAPE="$(listcape $PIN)"
+	INFO="$(listinfo $PIN)"
+	GPIOID="$(listgpio $PIN)"
+	PRUID="$(listpru $PIN)"
+	
+	echo Pin name: $PIN
+	echo Function if no cape loaded: $MODE
+	echo Function if cape loaded: $MODES
+	echo Function information: $INFO
+	echo Cape: $CAPE
+	echo Kernel GPIO id: $GPIOID
+	echo PRU GPIO id: $PRUID
+}
+
 # Configure a single pin
 # $1 = Pin name
 # $2 = Pin mode
 config_pin () {
-	PIN=$(fixup_pin $1)
+	set -e
+	OVERLAY=$(fixup_overlay $1)
 
-	MODES="$(listmodes $PIN)"
-	DIR=""
+	if [ $OVERLAY = "1" ] ; then
+		load_cape $2
+	else
+		PIN=$(fixup_pin $1)
 
-	case $2 in
-	# Map special GPIO setup modes to gpio with direction set
+		MODE="$(listmode $PIN)"
+		MODES="$(listmodes $PIN)"
+		CAPE="$(listcape $PIN)"
+		DIR=""
 
-	# GPIO with pull-up/down disabled
-	[iI][nN]|[iI][nN][pP][uU][tT])
-		MODE=gpio;
-		DIR=in
-		;;
-	[oO][uU][tT]|[oO][uU][tT][pP][uU][tT])
-		MODE=gpio;
-		DIR=out
-		;;
-	[lL][oO]|[lL][oO][wW]|0)
-		MODE=gpio;
-		DIR=low
-		;;
-	[hH][iI]|[hH][iI][gG][hH]|1)
-		MODE=gpio;
-		DIR=high
-		;;
+		check_cape $CAPE
 
-	# GPIO with pull-down enabled
-	[iI][nN]-|[iI][nN][pP][uU][tT]-|[iI][nN][-_][pP][uU]|[iI][nN][pP][dD][tT][-_][pP][dD])
-		MODE=gpio_pd;
-		DIR=in
-		;;
-	[oO][uU][tT]-|[oO][uU][tT][pP][uU][tT]-|[oO][uU][tT][-_][pP][dD]|[oO][uU][tT][pP][uU][tT][-_][pP][dD])
-		MODE=gpio_pd;
-		DIR=out
-		;;
-	[lL][oO]-|[lL][oO][wW]-|0-|[lL][oO][-_][pP][dD]|[lL][oO][wW][-_][pP][dD]|0[-_][pP][dD])
-		MODE=gpio_pd;
-		DIR=low
-		;;
-	[hH][iI]-|[hH][iI][gG][hH]-|1-|[hH][iI][-_][pP][dD]|[hH][iI][gG][hH][-_][pP][dD]|1[-_][pP][dD])
-		MODE=gpio_pd;
-		DIR=high
-		;;
+		case $2 in
+		# Map special GPIO setup modes to gpio with direction set
 
-	# GPIO with pull-up enabled
-	[iI][nN]+|[iI][nN][pP][uU][tT]+|[iI][nN][-_][pP][uU]|[iI][nN][pP][uU][tT][-_][pP][uU])
-		MODE=gpio_pu;
-		DIR=in
-		;;
-	[oO][uU][tT]+|[oO][uU][tT][pP][uU][tT]+|[oO][uU][tT][-_][pP][uU]|[oO][uU][tT][pP][uU][tT][-_][pP][uU])
-		MODE=gpio_pu;
-		DIR=out
-		;;
-	[lL][oO]+|[lL][oO][wW]+|0+|[lL][oO][-_][pP][uU]|[lL][oO][wW][-_][pP][uU]|0[-_][pP][uU])
-		MODE=gpio_pu;
-		DIR=low
-		;;
-	[hH][iI]+|[hH][iI][gG][hH]+|1+|[hH][iI][-_][pP][uU]|[hH][iI][gG][hH][-_][pP][uU]|1[-_][pP][uU])
-		MODE=gpio_pd;
-		DIR=high
-		;;
+		# GPIO with pull-up/down disabled
+		[iI][nN]|[iI][nN][pP][uU][tT])
+			MODE=gpio;
+			DIR=in
+			;;
+		[oO][uU][tT]|[oO][uU][tT][pP][uU][tT])
+			MODE=gpio;
+			DIR=out
+			;;
+		[lL][oO]|[lL][oO][wW]|0)
+			MODE=gpio;
+			DIR=low
+			;;
+		[hH][iI]|[hH][iI][gG][hH]|1)
+			MODE=gpio;
+			DIR=high
+			;;
 
-	# Check to make sure the provided mode is legal
-	*)  MODE="$2"; DIR=""
-		FOUND=0
-		set -- $MODES
-		while [ $# -gt 0 ] ; do
-			if [ "$MODE" = "$1" ] ; then
-				FOUND=1
-				break
+		# GPIO with pull-down enabled
+		[iI][nN]-|[iI][nN][pP][uU][tT]-|[iI][nN][-_][pP][uU]|[iI][nN][pP][dD][tT][-_][pP][dD])
+			MODE=gpio_pd;
+			DIR=in
+			;;
+		[oO][uU][tT]-|[oO][uU][tT][pP][uU][tT]-|[oO][uU][tT][-_][pP][dD]|[oO][uU][tT][pP][uU][tT][-_][pP][dD])
+			MODE=gpio_pd;
+			DIR=out
+			;;
+		[lL][oO]-|[lL][oO][wW]-|0-|[lL][oO][-_][pP][dD]|[lL][oO][wW][-_][pP][dD]|0[-_][pP][dD])
+			MODE=gpio_pd;
+			DIR=low
+			;;
+		[hH][iI]-|[hH][iI][gG][hH]-|1-|[hH][iI][-_][pP][dD]|[hH][iI][gG][hH][-_][pP][dD]|1[-_][pP][dD])
+			MODE=gpio_pd;
+			DIR=high
+			;;
+
+		# GPIO with pull-up enabled
+		[iI][nN]+|[iI][nN][pP][uU][tT]+|[iI][nN][-_][pP][uU]|[iI][nN][pP][uU][tT][-_][pP][uU])
+			MODE=gpio_pu;
+			DIR=in
+			;;
+		[oO][uU][tT]+|[oO][uU][tT][pP][uU][tT]+|[oO][uU][tT][-_][pP][uU]|[oO][uU][tT][pP][uU][tT][-_][pP][uU])
+			MODE=gpio_pu;
+			DIR=out
+			;;
+		[lL][oO]+|[lL][oO][wW]+|0+|[lL][oO][-_][pP][uU]|[lL][oO][wW][-_][pP][uU]|0[-_][pP][uU])
+			MODE=gpio_pu;
+			DIR=low
+			;;
+		[hH][iI]+|[hH][iI][gG][hH]+|1+|[hH][iI][-_][pP][uU]|[hH][iI][gG][hH][-_][pP][uU]|1[-_][pP][uU])
+			MODE=gpio_pd;
+			DIR=high
+			;;
+
+		# Check to make sure the provided mode is legal
+		*)  MODE="$2"; DIR=""
+			FOUND=0
+			set -- $MODES
+			while [ $# -gt 0 ] ; do
+				if [ "$MODE" = "$1" ] ; then
+					FOUND=1
+					break
+				fi
+				shift
+			done
+			
+			if [ $FOUND != 1 ] ; then
+				echo_err "Invalid mode: $MODE"
+				exit 1
 			fi
-			shift
+		esac
+
+		echo_dbg "PIN: \"$PIN\" MODE: \"$MODE\" DIR: \"$DIR\""
+
+		if [ -n "$DIR" ] ; then
+			eval GPIO="\$${PIN}_GPIO"
+			FILE="$GPIODIR/gpio$GPIO/direction"
+			if [ -w "$FILE" ] ; then
+				echo $DIR > "$FILE"
+			else
+				echo_err "Cannot write gpio direction file: $FILE"
+				exit 1
+			fi
+		fi
+
+		# Expand filename using shell globbing
+		for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
+			if [ -w $FILE ] ; then
+				echo_dbg "echo $MODE > $FILE"
+				echo $MODE > $FILE
+			else
+				echo_err "Cannot write pinmux file: $FILE"
+				exit 1
+			fi
 		done
-		
-		if [ $FOUND != 1 ] ; then
-			echo_err "Invalid mode: $MODE"
-			exit 1
-		fi
-	esac
-
-	echo_dbg "PIN: \"$PIN\" MODE: \"$MODE\" DIR: \"$DIR\""
-
-	if [ -n "$DIR" ] ; then
-		eval GPIO="\$${PIN}_GPIO"
-		FILE="$GPIODIR/gpio$GPIO/direction"
-		if [ -w "$FILE" ] ; then
-			echo $DIR > "$FILE"
-		else
-			echo_err "Cannot write gpio direction file: $FILE"
-			exit 1
-		fi
 	fi
 
-	# Expand filename using shell globbing
-	for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
-		if [ -w $FILE ] ; then
-			echo_dbg "echo $MODE > $FILE"
-			echo $MODE > $FILE
-		else
-			echo_err "Cannot write pinmux file: $FILE"
-			exit 1
-		fi
-	done
+	
 }
 
 # Read a file containing pin setup tuples and optional comments and whitespace
@@ -426,18 +967,73 @@ readfile () {
 	
 }
 
+dtbo_err () {
+	echo_err "Error loading device tree overlay file: $DTBO" >&2
+	exit 1
+}
+
+SLOTS=/sys/devices/bone_capemgr.*/slots
+
+# Load a installed cape
+# $1 cape to load
+load_cape () {
+	# Make sure required device tree overlay(s) are loaded
+	# cape-bone-iio
+	for DTBO in $1 ; do
+
+		if grep -q $DTBO $SLOTS ; then
+			echo_std $DTBO already loaded
+		else
+			# Expand filename using shell globbing
+			for FILE in $SLOTS ; do
+				if [ -w $FILE ] ; then
+					echo_std Loading $DTBO overlay
+					sudo -A su -c "echo $DTBO > $SLOTS" || dtbo_err
+					sleep 1
+				else
+					echo_err "Cannot write slots file: $FILE"
+					exit 1
+				fi
+			done
+		fi
+	done;
+}
+
+# Check whether a specific cape is loaded or not
+# $1 cape to check
+check_cape () {
+	if grep -q $1 $SLOTS ; then
+		echo_dbg $1 overlay found
+	else
+		if [ $AUTOLOAD -eq 0 ] ; then
+			echo_err $1 overlay not found
+			echo_err run \"$(basename $0) overlay $1\" to load the cape 
+			exit 1
+		else
+			echo_std $1 overlay not found
+			load_cape $1
+		fi
+	fi
+}
+
 # main ()
 
 DEBUG=""
 CMD=""
 CMDARG=""
+AUTOLOAD=0
 
-while getopts dfl:q: opt ; do
+while getopts adfl:q:i: opt ; do
 	case $opt in 
 	d)  [ "$DEBUG" = 1 ] && set -x
 		DEBUG=1
 		;;
+	a)  AUTOLOAD=1
+		;;
 	l)  CMD=list
+		CMDARG="$OPTARG"
+		;;
+	i)  CMD=info
 		CMDARG="$OPTARG"
 		;;
 	q)  CMD=query
@@ -453,10 +1049,12 @@ done
 
 shift `expr $OPTIND - 1`
 
+echo_dbg AUTOLOAD=$AUTOLOAD
 echo_dbg "Args: $@"
 
 case $CMD in
 list)   listmodes "$CMDARG" ;;
+info)   show_pin  "$CMDARG" ;;
 query)  query_pin "$CMDARG" ;;
 file)   readfile "$@" ;;
 *)  if [ $# -ne 2 ] ; then
