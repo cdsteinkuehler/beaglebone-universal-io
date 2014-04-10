@@ -3,6 +3,7 @@
 # Some important directories for use later
 OCPDIR=/sys/devices/ocp.*
 GPIODIR=/sys/class/gpio
+SLOTS=/sys/devices/bone_capemgr.*/slots
 
 # Create mappings between BeagleBone header pins and kernel gpio
 # numbers.  These could be bash arrays or coded in python, but simple
@@ -410,21 +411,21 @@ P9_18_CAPE="cape-universal"
 
 P9_19_PRU="45"
 P9_19_GPIO="13"
-P9_19_PIN="cape_i2c"
-P9_19_INFO="i2c"
+P9_19_PIN="i2c"
+P9_19_INFO="i2c2_scl"
 P9_19_CAPE=""
 
 P9_20_PRU="44"
 P9_20_GPIO="12"
-P9_20_PIN="cape_i2c"
-P9_20_INFO="i2c"
+P9_20_PIN="i2c"
+P9_20_INFO="i2c2_sda"
 P9_20_CAPE=""
 
 P9_21_PRU="35"
 P9_21_GPIO="3"
 P9_21_PIN="gpio"
 P9_21_PINMUX="default gpio gpio_pu gpio_pd spi uart i2c pwm"
-P9_21_INFO="default gpio0_3,pru:35 gpio0_3 gpio0_3 spi0_d0 uart2_txd i2c2_scl ehrpwm0B"
+P9_21_INFO="gpio0_3 default gpio0_3,pru:35 gpio0_3 gpio0_3 spi0_d0 uart2_txd i2c2_scl ehrpwm0B"
 P9_21_CAPE="cape-universal"
 
 P9_22_PRU="34"
@@ -584,7 +585,7 @@ echo_err () {
 }
 
 echo_std () {
-	echo "$@" 1>&2
+	echo "$@"
 }
 
 echo_dbg () {
@@ -919,27 +920,15 @@ config_pin () {
 		if [ -n "$DIR" ] ; then
 			eval GPIO="\$${PIN}_GPIO"
 			FILE="$GPIODIR/gpio$GPIO/direction"
-			if [ -w "$FILE" ] ; then
-				echo $DIR > "$FILE"
-			else
-				echo_err "Cannot write gpio direction file: $FILE"
-				exit 1
-			fi
+			sudo -A su -c "echo $DIR > $FILE" || (echo_err "Cannot write gpio direction file: $FILE" && exit 1)
 		fi
 
 		# Expand filename using shell globbing
 		for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
-			if [ -w $FILE ] ; then
-				echo_dbg "echo $MODE > $FILE"
-				echo $MODE > $FILE
-			else
-				echo_err "Cannot write pinmux file: $FILE"
-				exit 1
-			fi
+			echo_dbg "echo $MODE > $FILE"
+			sudo -A su -c "echo $MODE > $FILE" || (echo_err "Cannot write pinmux file: $FILE" && exit 1)
 		done
 	fi
-
-	
 }
 
 # Read a file containing pin setup tuples and optional comments and whitespace
@@ -967,13 +956,6 @@ readfile () {
 	
 }
 
-dtbo_err () {
-	echo_err "Error loading device tree overlay file: $DTBO" >&2
-	exit 1
-}
-
-SLOTS=/sys/devices/bone_capemgr.*/slots
-
 # Load a installed cape
 # $1 cape to load
 load_cape () {
@@ -986,14 +968,9 @@ load_cape () {
 		else
 			# Expand filename using shell globbing
 			for FILE in $SLOTS ; do
-				if [ -w $FILE ] ; then
-					echo_std Loading $DTBO overlay
-					sudo -A su -c "echo $DTBO > $SLOTS" || dtbo_err
-					sleep 1
-				else
-					echo_err "Cannot write slots file: $FILE"
-					exit 1
-				fi
+				echo_std Loading $DTBO overlay
+				sudo -A su -c "echo $DTBO > $SLOTS" || (echo_err "Error loading device tree overlay file: $DTBO" && exit 1)
+				sleep 1
 			done
 		fi
 	done;
@@ -1065,4 +1042,6 @@ file)   readfile "$@" ;;
 	fi
 	;;
 esac
+
+exit 0
 
