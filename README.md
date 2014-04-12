@@ -180,3 +180,6 @@ helpful, particularly the spreadsheet file:
 
 https://github.com/selsinork/beaglebone-black-pinmux
 
+GUI
+-----
+You can find a Qt based graphical user interface for the beaglebone-universal-io here: https://github.com/strahlex/BBIOConfig
