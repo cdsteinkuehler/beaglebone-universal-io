@@ -170,7 +170,7 @@
             P8_32_gpio_pd_pin: pinmux_P8_32_gpio_pd_pin {
                 pinctrl-single,pins = <0x0DC  0x27>; };     /* Mode 7, Pull-Down, RxActive */
             P8_32_uart_pin: pinmux_P8_32_uart_pin {
-                pinctrl-single,pins = <0x0DC  0x36>; };     /* Mode 6, Pull-Up, RxActive */         
+                pinctrl-single,pins = <0x0DC  0x26>; };     /* Mode 6, Pull-Down, RxActive */         
             /* P8_33 (ZCZ ball V3 ) hdmi    */
             P8_33_default_pin: pinmux_P8_33_default_pin {
                 pinctrl-single,pins = <0x0D4  0x27>; };     /* Mode 7, Pull-Down, RxActive */
@@ -220,6 +220,9 @@
                 pinctrl-single,pins = <0x0C0  0x37>; };     /* Mode 7, Pull-Up, RxActive */
             P8_37_gpio_pd_pin: pinmux_P8_37_gpio_pd_pin {
                 pinctrl-single,pins = <0x0C0  0x27>; };     /* Mode 7, Pull-Down, RxActive */
+            P8_37_uart_pin: pinmux_P8_37_uart_pin {
+                pinctrl-single,pins = <0x0C0  0x04>; };     /* Mode 4, Pull-Down*/
+
 
             /* P8_38 (ZCZ ball U2 ) hdmi    */
            P8_38_default_pin: pinmux_P8_38_default_pin {
@@ -230,6 +233,9 @@
                 pinctrl-single,pins = <0x0C4  0x37>; };     /* Mode 7, Pull-Up, RxActive */
             P8_38_gpio_pd_pin: pinmux_P8_38_gpio_pd_pin {
                 pinctrl-single,pins = <0x0C4  0x27>; };     /* Mode 7, Pull-Down, RxActive */
+            P8_38_uart_pin: pinmux_P8_38_uart_pin {
+                pinctrl-single,pins = <0x0C4  0x24>; };     /* Mode 4, Pull-Down, RxActive */
+
 
             /* P8_39 (ZCZ ball T3 ) hdmi    */
            P8_39_default_pin: pinmux_P8_39_default_pin {
@@ -472,21 +478,23 @@
            P8_37_pinmux {
                 compatible = "bone-pinmux-helper";
                 status = "okay";
-                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd";
+                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd","uart";
                 pinctrl-0 = <&P8_37_default_pin>;
                 pinctrl-1 = <&P8_37_gpio_pin>;
                 pinctrl-2 = <&P8_37_gpio_pu_pin>;
                 pinctrl-3 = <&P8_37_gpio_pd_pin>;
+                pinctrl-4 = <&P8_37_uart_pin>;
             };
 
            P8_38_pinmux {
                 compatible = "bone-pinmux-helper";
                 status = "okay";
-                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd";
+                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd","uart";
                 pinctrl-0 = <&P8_38_default_pin>;
                 pinctrl-1 = <&P8_38_gpio_pin>;
                 pinctrl-2 = <&P8_38_gpio_pu_pin>;
                 pinctrl-3 = <&P8_38_gpio_pd_pin>;
+                pinctrl-4 = <&P8_38_uart_pin>;
             };
 
             P8_39_pinmux {
