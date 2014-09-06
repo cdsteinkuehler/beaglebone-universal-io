@@ -124,54 +124,59 @@ The valid pinmux states for each pin are listed below:
   * P8_04_pinmux : default gpio gpio_pu gpio_pd
   * P8_05_pinmux : default gpio gpio_pu gpio_pd
   * P8_06_pinmux : default gpio gpio_pu gpio_pd
-    P8_07_pinmux : default gpio gpio_pu gpio_pd timer
-    P8_08_pinmux : default gpio gpio_pu gpio_pd timer
-    P8_09_pinmux : default gpio gpio_pu gpio_pd timer
-    P8_10_pinmux : default gpio gpio_pu gpio_pd timer
-    P8_11_pinmux : default gpio gpio_pu gpio_pd pruout qep
-    P8_12_pinmux : default gpio gpio_pu gpio_pd pruout qep
-    P8_13_pinmux : default gpio gpio_pu gpio_pd pwm
-    P8_14_pinmux : default gpio gpio_pu gpio_pd pwm
-    P8_15_pinmux : default gpio gpio_pu gpio_pd pruin qep
-    P8_16_pinmux : default gpio gpio_pu gpio_pd pruin qep
-    P8_17_pinmux : default gpio gpio_pu gpio_pd pwm
-    P8_18_pinmux : default gpio gpio_pu gpio_pd
-    P8_19_pinmux : default gpio gpio_pu gpio_pd pwm
+  * P8_07_pinmux : default gpio gpio_pu gpio_pd timer
+  * P8_08_pinmux : default gpio gpio_pu gpio_pd timer
+  * P8_09_pinmux : default gpio gpio_pu gpio_pd timer
+  * P8_10_pinmux : default gpio gpio_pu gpio_pd timer
+  * P8_11_pinmux : default gpio gpio_pu gpio_pd pruout qep
+  * P8_12_pinmux : default gpio gpio_pu gpio_pd pruout qep
+  * P8_13_pinmux : default gpio gpio_pu gpio_pd pwm
+  * P8_14_pinmux : default gpio gpio_pu gpio_pd pwm
+  * P8_15_pinmux : default gpio gpio_pu gpio_pd pruin qep
+  * P8_16_pinmux : default gpio gpio_pu gpio_pd pruin qep
+  * P8_17_pinmux : default gpio gpio_pu gpio_pd pwm
+  * P8_18_pinmux : default gpio gpio_pu gpio_pd
+  * P8_19_pinmux : default gpio gpio_pu gpio_pd pwm
   * P8_20_pinmux : default gpio gpio_pu gpio_pd pruout pruin
   * P8_21_pinmux : default gpio gpio_pu gpio_pd pruout pruin
   * P8_22_pinmux : default gpio gpio_pu gpio_pd
   * P8_23_pinmux : default gpio gpio_pu gpio_pd
   * P8_24_pinmux : default gpio gpio_pu gpio_pd
   * P8_25_pinmux : default gpio gpio_pu gpio_pd
-    P8_26_pinmux : default gpio 
-  # P8 27-46 Reserved for HDMI
+  * P8_26_pinmux : default gpio 
 
-    P9_11_pinmux : default gpio gpio_pu gpio_pd uart 
-    P9_12_pinmux : default gpio gpio_pu gpio_pd 
-    P9_13_pinmux : default gpio gpio_pu gpio_pd uart 
-    P9_14_pinmux : default gpio gpio_pu gpio_pd pwm 
-    P9_15_pinmux : default gpio gpio_pu gpio_pd pwm 
-    P9_16_pinmux : default gpio gpio_pu gpio_pd pwm 
-    P9_17_pinmux : default gpio gpio_pu gpio_pd spi i2c pwm 
-    P9_18_pinmux : default gpio gpio_pu gpio_pd spi i2c pwm 
-    # P9_19 Reserved for cape I2C bus
-    # P9_20 Reserved for cape I2C bus
-    P9_21_pinmux : default gpio gpio_pu gpio_pd spi uart i2c pwm 
-    P9_22_pinmux : default gpio gpio_pu gpio_pd spi uart i2c pwm 
-    P9_23_pinmux : default gpio gpio_pu gpio_pd pwm 
-    P9_24_pinmux : default gpio gpio_pu gpio_pd uart can i2c pruin 
-    P9_25_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
-    P9_26_pinmux : default gpio gpio_pu gpio_pd uart can i2c pruin 
-    P9_27_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
-    P9_28_pinmux : default gpio gpio_pu gpio_pd pwm spi pwm2 pruout pruin 
-    P9_29_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
-    P9_30_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
-    P9_31_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
-    # P9 31-40 Analog Signals, no pinmux
-    P9_41_pinmux : default gpio gpio_pu gpio_pd timer pruin 
-    P9_91_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
-    P9_42_pinmux : default gpio gpio_pu gpio_pd pwm uart spics spiclk 
-    P9_92_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
+## P8 27-46 Reserved for HDMI
+
+  * P9_11_pinmux : default gpio gpio_pu gpio_pd uart 
+  * P9_12_pinmux : default gpio gpio_pu gpio_pd 
+  * P9_13_pinmux : default gpio gpio_pu gpio_pd uart 
+  * P9_14_pinmux : default gpio gpio_pu gpio_pd pwm 
+  * P9_15_pinmux : default gpio gpio_pu gpio_pd pwm 
+  * P9_16_pinmux : default gpio gpio_pu gpio_pd pwm 
+  * P9_17_pinmux : default gpio gpio_pu gpio_pd spi i2c pwm 
+  * P9_18_pinmux : default gpio gpio_pu gpio_pd spi i2c pwm 
+
+## P9_19 Reserved for cape I2C bus
+## P9_20 Reserved for cape I2C bus
+
+  * P9_21_pinmux : default gpio gpio_pu gpio_pd spi uart i2c pwm 
+  * P9_22_pinmux : default gpio gpio_pu gpio_pd spi uart i2c pwm 
+  * P9_23_pinmux : default gpio gpio_pu gpio_pd pwm 
+  * P9_24_pinmux : default gpio gpio_pu gpio_pd uart can i2c pruin 
+  * P9_25_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
+  * P9_26_pinmux : default gpio gpio_pu gpio_pd uart can i2c pruin 
+  * P9_27_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
+  * P9_28_pinmux : default gpio gpio_pu gpio_pd pwm spi pwm2 pruout pruin 
+  * P9_29_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
+  * P9_30_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
+  * P9_31_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
+
+## P9 31-40 Analog Signals, no pinmux
+
+  * P9_41_pinmux : default gpio gpio_pu gpio_pd timer pruin 
+  * P9_91_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
+  * P9_42_pinmux : default gpio gpio_pu gpio_pd pwm uart spics spiclk 
+  * P9_92_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
 
 You will need to reference the AM335x data sheet and Technical Reference
 Manual from TI to determine how to setup pin multiplexing for the
