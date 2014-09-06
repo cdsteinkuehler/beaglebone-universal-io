@@ -11,10 +11,10 @@ the kernel.
 This project is a series of four overlay files, designed to work with
 the BeagleBone Black:
 
-  cape-universal  Exports all pins not used by HDMI and eMMC
-  cape-universaln Adds audio pins to above, use with HDMIN "cape"
-  cape-univ-emmc  Exports pins used by eMMC, load if eMMC is disabled
-  cape-univ-hdmi  Exports pins used by HDMI, load if HDMI is disabled
+  * cape-universal  Exports all pins not used by HDMI and eMMC
+  * cape-universaln Adds audio pins to above, use with HDMIN "cape"
+  * cape-univ-emmc  Exports pins used by eMMC, load if eMMC is disabled
+  * cape-univ-hdmi  Exports pins used by HDMI, load if HDMI is disabled
 
 
 Usage
