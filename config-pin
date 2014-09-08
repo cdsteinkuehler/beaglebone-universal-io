@@ -902,7 +902,7 @@ config_pin () {
 			;;
 
 		# GPIO with pull-down enabled
-		[iI][nN]-|[iI][nN][pP][uU][tT]-|[iI][nN][-_][pP][uU]|[iI][nN][pP][dD][tT][-_][pP][dD])
+		[iI][nN]-|[iI][nN][pP][uU][tT]-|[iI][nN][-_][pP][dD]|[iI][nN][pP][dD][tT][-_][pP][dD])
 			MODE=gpio_pd;
 			DIR=in
 			;;
