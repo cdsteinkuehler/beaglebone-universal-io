@@ -775,9 +775,8 @@ query_pin () {
 	set -e
 	PIN=$(fixup_pin $1)
 	MODES="$(listmodes $PIN)"
-	CAPE="$(listcape $PIN)"
 
-	check_cape $CAPE
+	check_pin $PIN
 
 	# Expand filename using shell globbing
 	for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
@@ -791,11 +790,13 @@ query_pin () {
 
 	case "$MODE" in
 	default|gpio*)
+		VALUE=pin_not_exported
+		DIR=pin_not_exported
 		eval GPIO="\$${PIN}_GPIO"
 		FILE="$GPIODIR/gpio$GPIO/value"
-		read VALUE JUNK < $FILE
+		[ -r $FILE ] && read VALUE JUNK < $FILE
 		FILE="$GPIODIR/gpio$GPIO/direction"
-		read DIR JUNK < $FILE
+		[ -r $FILE ] && read DIR JUNK < $FILE
 		echo "$PIN Mode: $MODE Direction: $DIR Value: $VALUE"
 		;;
 	*)  echo "$PIN Mode: $MODE"
@@ -844,19 +845,27 @@ load_cape () {
 	done;
 }
 
-# Check whether a specific cape is loaded or not
-# $1 cape to check
-check_cape () {
-	if grep -q $1 $SLOTS ; then
-		echo_dbg $1 overlay found
+# Check whether support for a specific pin is loaded or not
+# $1 pin to check
+check_pin () {
+	if [ -e $OCPDIR/${PIN}_pinmux.* ] ; then
+		echo_dbg $1 pinmux file found
 	else
+		echo_err $1 pinmux file not found!
+
+		CAPE="$(listcape $1)"
+
 		if [ $AUTOLOAD -eq 0 ] ; then
-			echo_err $1 overlay not found
-			echo_err run \"$(basename $0) overlay $1\" to load the cape 
+			if [ -e $SLOTS ] ; then
+				echo_err "$CAPE overlay not found"
+				echo_err "run \"$(basename $0) overlay $CAPE\" to load the cape"
+			else
+				echo_err "Please verify your device tree file"
+			fi
 			exit 1
 		else
 			echo_std $1 overlay not found
-			load_cape $1
+			load_cape $CAPE
 		fi
 	fi
 }
@@ -875,10 +884,9 @@ config_pin () {
 
 		MODE="$(listmode $PIN)"
 		MODES="$(listmodes $PIN)"
-		CAPE="$(listcape $PIN)"
 		DIR=""
 
-		check_cape $CAPE
+		check_pin $PIN
 
 		case $2 in
 		# Map special GPIO setup modes to gpio with direction set
@@ -960,7 +968,11 @@ config_pin () {
 		if [ -n "$DIR" ] ; then
 			eval GPIO="\$${PIN}_GPIO"
 			FILE="$GPIODIR/gpio$GPIO/direction"
-			sudo -A su -c "echo $DIR > $FILE" || (echo_err "Cannot write gpio direction file: $FILE" && exit 1)
+			if [ -e $FILE ] ; then
+				sudo -A su -c "echo $DIR > $FILE" || (echo_err "Cannot write gpio direction file: $FILE" && exit 1)
+			else
+				echo_err "WARNING: GPIO pin not exported, cannot set direction or value!"
+			fi
 		fi
 
 		# Expand filename using shell globbing
