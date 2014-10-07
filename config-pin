@@ -838,7 +838,7 @@ load_cape () {
 			# Expand filename using shell globbing
 			for FILE in $SLOTS ; do
 				echo_std Loading $DTBO overlay
-				sudo -A su -c "echo $DTBO > $SLOTS" || (echo_err "Error loading device tree overlay file: $DTBO" && exit 1)
+				sudo -A bash -c "echo $DTBO > $SLOTS" || (echo_err "Error loading device tree overlay file: $DTBO" && exit 1)
 				sleep 1
 			done
 		fi
@@ -969,7 +969,7 @@ config_pin () {
 			eval GPIO="\$${PIN}_GPIO"
 			FILE="$GPIODIR/gpio$GPIO/direction"
 			if [ -e $FILE ] ; then
-				sudo -A su -c "echo $DIR > $FILE" || (echo_err "Cannot write gpio direction file: $FILE" && exit 1)
+				sudo -A bash -c "echo $DIR > $FILE" || (echo_err "Cannot write gpio direction file: $FILE" && exit 1)
 			else
 				echo_err "WARNING: GPIO pin not exported, cannot set direction or value!"
 			fi
@@ -978,7 +978,7 @@ config_pin () {
 		# Expand filename using shell globbing
 		for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
 			echo_dbg "echo $MODE > $FILE"
-			sudo -A su -c "echo $MODE > $FILE" || (echo_err "Cannot write pinmux file: $FILE" && exit 1)
+			sudo -A bash -c "echo $MODE > $FILE" || (echo_err "Cannot write pinmux file: $FILE" && exit 1)
 		done
 	fi
 }
