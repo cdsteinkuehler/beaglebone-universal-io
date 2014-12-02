@@ -1,8 +1,6 @@
 # beaglebone-universal-io
-=========================
 
 ## Overview
------------
 
 Device tree overlay and support scripts for using most available
 hardware I/O on the BeagleBone without editing dts files or rebuilding
@@ -19,7 +17,6 @@ the BeagleBone Black:
 
 
 ## Usage
---------
 
 Load the overlay as usual
 
@@ -52,16 +49,19 @@ config-pin -l P8.07
 # Query the status of a pin (note the appropriate universal cape
 # must be loaded for this to work)
 config-pin -q P8.07
+
+# Complete usage details
+config-pin -h
 ```
 
 ## GUI 
-------
+
 You can find a Qt based graphical user interface for the
 beaglebone-universal-io here: https://github.com/strahlex/BBIOConfig
 
 
 ## Details
-----------
+
 If you wish to setup the pins manually, or to know what is happening
 behind the curtain, keep reading.
 
