@@ -666,6 +666,8 @@ usage () {
 	    Read list of pin configurations from file, one per line
 	    Comments and white-space are allowed
 	    With no file, or when file is -, read standard input.
+	$NAME -h
+	    Display this help text
 	
 	EOF
 }
@@ -1037,7 +1039,7 @@ CMD=""
 CMDARG=""
 AUTOLOAD=0
 
-while getopts adfl:q:i: opt ; do
+while getopts adfhl:q:i: opt ; do
 	case $opt in 
 	d)  [ "$DEBUG" = 1 ] && set -x
 		DEBUG=1
