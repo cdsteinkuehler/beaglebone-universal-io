@@ -1,8 +1,8 @@
-beaglebone-universal-io
-=======================
+# beaglebone-universal-io
+=========================
 
-Overview
---------
+## Overview
+-----------
 
 Device tree overlay and support scripts for using most available
 hardware I/O on the BeagleBone without editing dts files or rebuilding
@@ -11,18 +11,19 @@ the kernel.
 This project is a series of four overlay files, designed to work with
 the BeagleBone Black:
 
-  * cape-universal  Exports all pins not used by HDMI and eMMC
-  * cape-universaln removes audio pins from above, use with HDMIN "cape"
+  * cape-universal  Exports all pins not used by HDMIN and eMMC (including audio)
+  * cape-universaln Exports all pins not used by HDMI and eMMC (no audio pins are exported)
   * cape-univ-emmc  Exports pins used by eMMC, load if eMMC is disabled
-  * cape-univ-hdmi  Exports pins used by HDMI, load if HDMI is disabled
+  * cape-univ-hdmi  Exports pins used by HDMI video, load if HDMI is disabled
+  * cape-univ-audio Exports pins used by HDMI audio
 
 
-Usage
------
+## Usage
+--------
 
 Load the overlay as usual
 
-    echo cape-universal > /sys/devices/bone_capemgr.*/slots
+    echo cape-universaln > /sys/devices/bone_capemgr.*/slots
 
 At this point, the various devices are loaded and all gpio have been
 exported.  All pins currently default to gpio inputs, with pull up or
@@ -32,9 +33,37 @@ with some I/O pins configured by default at boot, this overlay will
 likely change to match.
 
 The provided config-pin utility is intended to assist with  setting up
-the various pin modes and querying the current pin state.  If you wish
-to setup the pins manually, or to know what is happening behind the
-curtain, keep reading.
+the various pin modes and querying the current pin state.
+
+```
+# Configure a pin for a specific mode
+config-pin P8.07 timer
+
+# Configure a pin as gpio output and setting the state
+config-pin P8.07 hi
+config-pin P8.07 low
+
+# Configure a pin as a gpio input
+config-pin P8.07 in
+
+# List the valid modes for a specific pin
+config-pin -l P8.07
+
+# Query the status of a pin (note the appropriate universal cape
+# must be loaded for this to work)
+config-pin -q P8.07
+```
+
+## GUI 
+------
+You can find a Qt based graphical user interface for the
+beaglebone-universal-io here: https://github.com/strahlex/BBIOConfig
+
+
+## Details
+----------
+If you wish to setup the pins manually, or to know what is happening
+behind the curtain, keep reading.
 
 To control the gpio pins, you may use the sysfs interface.  Each
 exported gpio pin has an entry under /sys/class/gpio/gpioNN, where NN
@@ -49,39 +78,7 @@ list created for you in the status file of the device tree overlay:
      3 P9_41                     20 IN  0
      4 P9_31                    110 IN  0
      5 P9_30                    112 IN  0
-     6 P9_29                    111 IN  0
-     7 P9_28                    113 IN  0
-     8 P9_27                    115 IN  0
-     9 P9_26                     14 IN  0
-    10 P9_25                    117 IN  0
-    11 P9_24                     15 IN  0
-    12 P9_23                     49 IN  0
-    13 P9_22                      2 IN  0
-    14 P9_21                      3 IN  0
-    15 P9_20                     12 IN  0
-    16 P9_19                     13 IN  0
-    17 P9_18                      4 IN  0
-    18 P9_17                      5 IN  0
-    19 P9_16                     51 IN  0
-    20 P9_15                     48 IN  0
-    21 P9_14                     50 IN  0
-    22 P9_13                     31 IN  0
-    23 P9_12                     60 IN  0
-    24 P9_11                     30 IN  0
-    25 P8_26                     61 IN  0
-    26 P8_19                     22 IN  0
-    27 P8_18                     65 IN  0
-    28 P8_17                     27 IN  0
-    29 P8_16                     46 IN  0
-    30 P8_15                     47 IN  0
-    31 P8_14                     26 IN  0
-    32 P8_13                     23 IN  0
-    33 P8_12                     44 IN  0
-    34 P8_11                     45 IN  0
-    35 P8_10                     68 IN  0
-    36 P8_09                     69 IN  0
-    37 P8_08                     67 IN  0
-    38 P8_07                     66 IN  0
+     ...
 
 Pin multiplexing is controled via files in /sys/devices/ocp.*/, where
 each exported I/O pin has a pinmux control directory.  The directory is
@@ -117,66 +114,10 @@ with a default I/O setup that enables some special functions, this
 overlay will likely change to match.  Most pins have other functions
 available besides gpio, see the list below for valid settings.
 
-The valid pinmux states for each pin are listed below:
+For a list of valid pinmux states for each pin, use the config-pin
+utility:
 
-  * = Reserved for eMMC, you must disable the eMMC to use these pins
-  * P8_03_pinmux : default gpio gpio_pu gpio_pd
-  * P8_04_pinmux : default gpio gpio_pu gpio_pd
-  * P8_05_pinmux : default gpio gpio_pu gpio_pd
-  * P8_06_pinmux : default gpio gpio_pu gpio_pd
-  * P8_07_pinmux : default gpio gpio_pu gpio_pd timer
-  * P8_08_pinmux : default gpio gpio_pu gpio_pd timer
-  * P8_09_pinmux : default gpio gpio_pu gpio_pd timer
-  * P8_10_pinmux : default gpio gpio_pu gpio_pd timer
-  * P8_11_pinmux : default gpio gpio_pu gpio_pd pruout qep
-  * P8_12_pinmux : default gpio gpio_pu gpio_pd pruout qep
-  * P8_13_pinmux : default gpio gpio_pu gpio_pd pwm
-  * P8_14_pinmux : default gpio gpio_pu gpio_pd pwm
-  * P8_15_pinmux : default gpio gpio_pu gpio_pd pruin qep
-  * P8_16_pinmux : default gpio gpio_pu gpio_pd pruin qep
-  * P8_17_pinmux : default gpio gpio_pu gpio_pd pwm
-  * P8_18_pinmux : default gpio gpio_pu gpio_pd
-  * P8_19_pinmux : default gpio gpio_pu gpio_pd pwm
-  * P8_20_pinmux : default gpio gpio_pu gpio_pd pruout pruin
-  * P8_21_pinmux : default gpio gpio_pu gpio_pd pruout pruin
-  * P8_22_pinmux : default gpio gpio_pu gpio_pd
-  * P8_23_pinmux : default gpio gpio_pu gpio_pd
-  * P8_24_pinmux : default gpio gpio_pu gpio_pd
-  * P8_25_pinmux : default gpio gpio_pu gpio_pd
-  * P8_26_pinmux : default gpio 
-
-## P8 27-46 Reserved for HDMI
-
-  * P9_11_pinmux : default gpio gpio_pu gpio_pd uart 
-  * P9_12_pinmux : default gpio gpio_pu gpio_pd 
-  * P9_13_pinmux : default gpio gpio_pu gpio_pd uart 
-  * P9_14_pinmux : default gpio gpio_pu gpio_pd pwm 
-  * P9_15_pinmux : default gpio gpio_pu gpio_pd pwm 
-  * P9_16_pinmux : default gpio gpio_pu gpio_pd pwm 
-  * P9_17_pinmux : default gpio gpio_pu gpio_pd spi i2c pwm 
-  * P9_18_pinmux : default gpio gpio_pu gpio_pd spi i2c pwm 
-
-## P9_19 Reserved for cape I2C bus
-## P9_20 Reserved for cape I2C bus
-
-  * P9_21_pinmux : default gpio gpio_pu gpio_pd spi uart i2c pwm 
-  * P9_22_pinmux : default gpio gpio_pu gpio_pd spi uart i2c pwm 
-  * P9_23_pinmux : default gpio gpio_pu gpio_pd pwm 
-  * P9_24_pinmux : default gpio gpio_pu gpio_pd uart can i2c pruin 
-  * P9_25_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
-  * P9_26_pinmux : default gpio gpio_pu gpio_pd uart can i2c pruin 
-  * P9_27_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
-  * P9_28_pinmux : default gpio gpio_pu gpio_pd pwm spi pwm2 pruout pruin 
-  * P9_29_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
-  * P9_30_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
-  * P9_31_pinmux : default gpio gpio_pu gpio_pd pwm spi pruout pruin 
-
-## P9 31-40 Analog Signals, no pinmux
-
-  * P9_41_pinmux : default gpio gpio_pu gpio_pd timer pruin 
-  * P9_91_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
-  * P9_42_pinmux : default gpio gpio_pu gpio_pd pwm uart spics spiclk 
-  * P9_92_pinmux : default gpio gpio_pu gpio_pd qep pruout pruin 
+    config-pin -l <pin>
 
 You will need to reference the AM335x data sheet and Technical Reference
 Manual from TI to determine how to setup pin multiplexing for the
@@ -185,6 +126,3 @@ helpful, particularly the spreadsheet file:
 
 https://github.com/selsinork/beaglebone-black-pinmux
 
-GUI
------
-You can find a Qt based graphical user interface for the beaglebone-universal-io here: https://github.com/strahlex/BBIOConfig
