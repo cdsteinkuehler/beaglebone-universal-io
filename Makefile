@@ -1,5 +1,5 @@
-PREFIX := /usr/bin
-FIRMWAREPATH := /lib/firmware
+PREFIX ?= /usr/bin
+FIRMWAREPATH ?= /lib/firmware
 BUILDPATH = .
 
 SRC  = cape-universal-00A0.dts
@@ -10,7 +10,7 @@ SRC += cape-univ-audio-00A0.dts
 
 TARGET = config-pin
 
-all: ensure_buildpath build
+all: ensure_path build
 
 install: install_overlays install_target
 
@@ -19,8 +19,11 @@ $(BUILDPATH)/%.dtbo : %.dts
 	@echo "Compiling file: $<"
 	dtc -@ -I dts -O dtb -o $@ $<
 
-ensure_buildpath:
+ensure_path:
 	mkdir -p $(BUILDPATH)
+	mkdir -p $(PREFIX)
+	mkdir -p $(FIRMWAREPATH)
+
 
 build : $(SRC:%.dts=$(BUILDPATH)/%.dtbo)
 
