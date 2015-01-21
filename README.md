@@ -18,7 +18,12 @@ the BeagleBone Black:
 
 ## Usage
 
-Load the overlay as usual
+If using a 3.14 or newer kernel, make sure your device tree inclues the
+pinmux helper entries required for the pins you want to use.  If you're
+using an RCN built kernel (if you don't know, you probably are), these
+should be present by default.
+
+If using a 3.8.13 kernel with capemgr, load the overlay as usual
 
     echo cape-universaln > /sys/devices/bone_capemgr.*/slots
 
