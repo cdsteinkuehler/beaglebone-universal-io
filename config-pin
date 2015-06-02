@@ -5,6 +5,12 @@ OCPDIR=/sys/devices/ocp.*
 GPIODIR=/sys/class/gpio
 SLOTS=/sys/devices/bone_capemgr.*/slots
 
+#4.1.x where lots of things changed...
+if [ -d /sys/devices/platform/ ] ; then
+	OCPDIR=/sys/devices/platform/ocp/ocp*
+	SLOTS=/sys/devices/platform/bone_capemgr/slots
+fi
+
 # Create mappings between BeagleBone header pins and kernel gpio
 # numbers.  These could be bash arrays or coded in python, but simple
 # shell constructs are used so this code runs on a minimal system
@@ -800,15 +806,27 @@ query_pin () {
 
 	check_pin $PIN
 
-	# Expand filename using shell globbing
-	for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
-		if [ -r $FILE ] ; then
-			read MODE JUNK < $FILE
-		else
-			echo_err "Cannot read pinmux file: $FILE"
-			exit 1
-		fi
-	done	
+	if [ -d /sys/devices/platform/ ] ; then
+		# Expand filename using shell globbing
+		for FILE in $OCPDIR${PIN}_pinmux/state ; do
+			if [ -r $FILE ] ; then
+				read MODE JUNK < $FILE
+			else
+				echo_err "Cannot read pinmux file: $FILE"
+				exit 1
+			fi
+		done
+	else
+		# Expand filename using shell globbing
+		for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
+			if [ -r $FILE ] ; then
+				read MODE JUNK < $FILE
+			else
+				echo_err "Cannot read pinmux file: $FILE"
+				exit 1
+			fi
+		done
+	fi
 
 	case "$MODE" in
 	default|gpio*)
@@ -871,6 +889,8 @@ load_cape () {
 # $1 pin to check
 check_pin () {
 	if [ -e $OCPDIR/${PIN}_pinmux.* ] ; then
+		echo_dbg $1 pinmux file found
+	elif [ -e $OCPDIR${PIN}_pinmux ] ; then
 		echo_dbg $1 pinmux file found
 	else
 		echo_err $1 pinmux file not found!
@@ -999,11 +1019,19 @@ config_pin () {
 			fi
 		fi
 
-		# Expand filename using shell globbing
-		for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
-			echo_dbg "echo $MODE > $FILE"
-			sudo -A bash -c "echo $MODE > $FILE" || (echo_err "Cannot write pinmux file: $FILE" && exit 1)
-		done
+		if [ -d /sys/devices/platform/ ] ; then
+			# Expand filename using shell globbing
+			for FILE in $OCPDIR${PIN}_pinmux/state ; do
+				echo_dbg "echo $MODE > $FILE"
+				sudo -A bash -c "echo $MODE > $FILE" || (echo_err "Cannot write pinmux file: $FILE" && exit 1)
+			done
+		else
+			# Expand filename using shell globbing
+			for FILE in $OCPDIR/${PIN}_pinmux.*/state ; do
+				echo_dbg "echo $MODE > $FILE"
+				sudo -A bash -c "echo $MODE > $FILE" || (echo_err "Cannot write pinmux file: $FILE" && exit 1)
+			done
+		fi
 	fi
 }
 
