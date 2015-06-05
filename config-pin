@@ -6,7 +6,8 @@ GPIODIR=/sys/class/gpio
 SLOTS=/sys/devices/bone_capemgr.*/slots
 
 #4.1.x where lots of things changed...
-if [ -d /sys/devices/platform/ ] ; then
+#use the new location of bone_capemgr for detection..
+if [ -d /sys/devices/platform/bone_capemgr/ ] ; then
 	OCPDIR=/sys/devices/platform/ocp/ocp*
 	SLOTS=/sys/devices/platform/bone_capemgr/slots
 fi
@@ -806,7 +807,7 @@ query_pin () {
 
 	check_pin $PIN
 
-	if [ -d /sys/devices/platform/ ] ; then
+	if [ -d /sys/devices/platform/bone_capemgr/ ] ; then
 		# Expand filename using shell globbing
 		for FILE in $OCPDIR${PIN}_pinmux/state ; do
 			if [ -r $FILE ] ; then
@@ -1019,7 +1020,7 @@ config_pin () {
 			fi
 		fi
 
-		if [ -d /sys/devices/platform/ ] ; then
+		if [ -d /sys/devices/platform/bone_capemgr/ ] ; then
 			# Expand filename using shell globbing
 			for FILE in $OCPDIR${PIN}_pinmux/state ; do
 				echo_dbg "echo $MODE > $FILE"
