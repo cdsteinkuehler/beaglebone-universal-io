@@ -11,6 +11,8 @@ the BeagleBone Black:
 
   * cape-universal  Exports all pins not used by HDMIN and eMMC (including audio)
   * cape-universaln Exports all pins not used by HDMI and eMMC (no audio pins are exported)
+  * cape-unversalh  Exports all pins not used by eMMC
+  * cape-unversala  Exports all pins
   * cape-univ-emmc  Exports pins used by eMMC, load if eMMC is disabled
   * cape-univ-hdmi  Exports pins used by HDMI video, load if HDMI is disabled
   * cape-univ-audio Exports pins used by HDMI audio
