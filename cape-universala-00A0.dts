@@ -22,7 +22,7 @@
     compatible = "ti,beaglebone", "ti,beaglebone-black";
 
     /* identification */
-    part-number = "cape-bone-universal";
+    part-number = "cape-bone-universala";
     version = "00A0";
 
     /* state the resources this cape uses */
