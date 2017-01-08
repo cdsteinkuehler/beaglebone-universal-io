@@ -426,6 +426,8 @@
                 pinctrl-single,pins = <0x0D8  0x27>; };     /* Mode 7, Pull-Down, RxActive */
             P8_31_uart_pin: pinmux_P8_31_uart_pin {
                 pinctrl-single,pins = <0x0D8  0x24>; };     /* Mode 4, Pull-Down, RxActive */
+	    P8_31_qep_pin: pinmux_P8_31_qep_pin {
+                pinctrl-single,pins = <0x0D8  0x22>; };     /* Mode 2, Pull-Down, RxActive */
 
             /* P8_32 (ZCZ ball T5 ) hdmi    */
             P8_32_default_pin: pinmux_P8_32_default_pin {
@@ -437,7 +439,10 @@
             P8_32_gpio_pd_pin: pinmux_P8_32_gpio_pd_pin {
                 pinctrl-single,pins = <0x0DC  0x27>; };     /* Mode 7, Pull-Down, RxActive */
             P8_32_uart_pin: pinmux_P8_32_uart_pin {
-                pinctrl-single,pins = <0x0DC  0x26>; };     /* Mode 6, Pull-Down, RxActive */         
+                pinctrl-single,pins = <0x0DC  0x26>; };     /* Mode 6, Pull-Down, RxActive */ 
+            P8_32_qep_pin: pinmux_P8_32_qep_pin {
+                pinctrl-single,pins = <0x0DC  0x22>; };     /* Mode 2, Pull-Down, RxActive */
+		
             /* P8_33 (ZCZ ball V3 ) hdmi    */
             P8_33_default_pin: pinmux_P8_33_default_pin {
                 pinctrl-single,pins = <0x0D4  0x27>; };     /* Mode 7, Pull-Down, RxActive */
@@ -447,6 +452,8 @@
                 pinctrl-single,pins = <0x0D4  0x37>; };     /* Mode 7, Pull-Up, RxActive */
             P8_33_gpio_pd_pin: pinmux_P8_33_gpio_pd_pin {
                 pinctrl-single,pins = <0x0D4  0x27>; };     /* Mode 7, Pull-Down, RxActive */
+	    P8_33_qep_pin: pinmux_P8_33_qep_pin {
+                pinctrl-single,pins = <0x0D4  0x22>; };     /* Mode 2, Pull-Down, RxActive */
 
             /* P8_34 (ZCZ ball U4 ) hdmi    */
             P8_34_default_pin: pinmux_P8_34_default_pin {
@@ -469,6 +476,8 @@
                 pinctrl-single,pins = <0x0D0  0x37>; };     /* Mode 7, Pull-Up, RxActive */
             P8_35_gpio_pd_pin: pinmux_P8_35_gpio_pd_pin {
                 pinctrl-single,pins = <0x0D0  0x27>; };     /* Mode 7, Pull-Down, RxActive */
+            P8_35_qep_pin: pinmux_P8_35_qep_pin {
+                pinctrl-single,pins = <0x0D0  0x22>; };     /* Mode 2, Pull-Down, RxActive */
 
             /* P8_36 (ZCZ ball U3 ) hdmi    */
            P8_36_default_pin: pinmux_P8_36_default_pin {
@@ -1264,32 +1273,35 @@
            P8_31_pinmux { /* hdmi */
                 compatible = "bone-pinmux-helper";
                 status = "okay";
-                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd","uart";
+                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd","uart","qep";
                 pinctrl-0 = <&P8_31_default_pin>;
                 pinctrl-1 = <&P8_31_gpio_pin>;
                 pinctrl-2 = <&P8_31_gpio_pu_pin>;
                 pinctrl-3 = <&P8_31_gpio_pd_pin>;
                 pinctrl-4 = <&P8_31_uart_pin>;
+                pinctrl-5 = <&P8_31_qep_pin>;
             };
 
            P8_32_pinmux { /* hdmi */
                 compatible = "bone-pinmux-helper";
                 status = "okay";
-                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd";
+                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd","qep";
                 pinctrl-0 = <&P8_32_default_pin>;
                 pinctrl-1 = <&P8_32_gpio_pin>;
                 pinctrl-2 = <&P8_32_gpio_pu_pin>;
                 pinctrl-3 = <&P8_32_gpio_pd_pin>;
+                pinctrl-4 = <&P8_32_qep_pin>;
             };
 
            P8_33_pinmux { /* hdmi */
                 compatible = "bone-pinmux-helper";
                 status = "okay";
-                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd";
+                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd","qep";
                 pinctrl-0 = <&P8_33_default_pin>;
                 pinctrl-1 = <&P8_33_gpio_pin>;
                 pinctrl-2 = <&P8_33_gpio_pu_pin>;
                 pinctrl-3 = <&P8_33_gpio_pd_pin>;
+                pinctrl-4 = <&P8_33_qep_pin>;
             };
 
            P8_34_pinmux { /* hdmi */
@@ -1306,11 +1318,12 @@
            P8_35_pinmux { /* hdmi */
                 compatible = "bone-pinmux-helper";
                 status = "okay";
-                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd";
+                pinctrl-names = "default", "gpio", "gpio_pu", "gpio_pd","qep";
                 pinctrl-0 = <&P8_35_default_pin>;
                 pinctrl-1 = <&P8_35_gpio_pin>;
                 pinctrl-2 = <&P8_35_gpio_pu_pin>;
                 pinctrl-3 = <&P8_35_gpio_pd_pin>;
+                pinctrl-4 = <&P8_35_qep_pin>;
             };
 
            P8_36_pinmux { /* hdmi */
