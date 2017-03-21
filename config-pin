@@ -901,11 +901,12 @@ check_pin () {
 		CAPE=`echo "$CAPE" | cut -d' ' -f1`
 
 		if [ $AUTOLOAD -eq 0 ] ; then
-			if [ -e $SLOTS ] ; then
-				echo_err "$CAPE overlay not found"
-				echo_err "run \"$(basename $0) overlay $CAPE\" to load the cape"
-			else
+            if grep -q $CAPE $SLOTS ; then
+                echo_err "$CAPE already loaded"
 				echo_err "Please verify your device tree file"
+			else
+                echo_err "$CAPE overlay not found"
+				echo_err "run \"$(basename $0) overlay $CAPE\" to load the cape"
 			fi
 			exit 1
 		else
