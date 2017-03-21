@@ -19,10 +19,10 @@
 /plugin/;
 
 / {
-    compatible = "ti,beaglebone", "ti,beaglebone-black";
+	compatible = "ti,beaglebone", "ti,beaglebone-black", "ti,beaglebone-green";
 
     /* identification */
-    part-number = "cape-bone-audio";
+    part-number = "cape-univ-audio";
     version = "00A0";
 
     /* state the resources this cape uses */
@@ -196,9 +196,6 @@
         target = <&ocp>;
         __overlay__ {
 
-            // !!!WARNING!!!
-            // gpio-of-helper &gpio pointers are off-by-one vs. the hardware:
-            //   hardware GPIO bank 0 = &gpio1
             cape-universal {
                 compatible = "gpio-of-helper";
                 status = "okay";
@@ -207,28 +204,28 @@
 
                 P9_25 {
                     gpio-name = "P9_25";
-                    gpio = <&gpio4 21 0>;
+                    gpio = <&gpio3 21 0>;
                     input;
                     dir-changeable;
                 };
 
                 P9_28 {
                     gpio-name = "P9_28";
-                    gpio = <&gpio4 17 0>;
+                    gpio = <&gpio3 17 0>;
                     input;
                     dir-changeable;
                 };
 
                 P9_29 {
                     gpio-name = "P9_29";
-                    gpio = <&gpio4 15 0>;
+                    gpio = <&gpio3 15 0>;
                     input;
                     dir-changeable;
                 };
 
                 P9_31 {
                     gpio-name = "P9_31";
-                    gpio = <&gpio4 14 0>;
+                    gpio = <&gpio3 14 0>;
                     input;
                     dir-changeable;
                 };
