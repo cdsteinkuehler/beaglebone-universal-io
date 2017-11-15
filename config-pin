@@ -20,7 +20,7 @@ fi
 # PIN: function when no cape is loaded
 # PINMUX: pin multiplexer functions when cape is loaded
 # INFO: information to pin functions, starts with information for PIN and then PINMUX
-# CAPE: cape that enables pinmuxing for specific pin, if no cape is set the pin is not modifyable
+# CAPE: cape that enables pinmuxing for specific pin, if no cape is set the pin is not modifiable
 # GPIO: kernel GPIO pin number
 # PRU: PRU pin number
 
@@ -630,7 +630,7 @@ usage () {
 	    configuring the gpio.  Valid <mode> strings vary based on <pin>,
 	    however all pins have a default and gpio mode.  The default mode is
 	    the reset state of the pin, with the pin mux set to gpio, the pull
-	    up/down resistor set to it's reset value, and the pin receive buffer
+	    up/down resistor set to its reset value, and the pin receive buffer
 	    enabled.  To setup gpio, the following <mode> strings are all valid:
 
 	        gpio : 
@@ -644,7 +644,7 @@ usage () {
 	        lo | low | 0 :
 	            Set pinmux to gpio and set gpio direction to output driving low
 
-	    To enable pull-up or pull-down resistors, a suffex may be appended to
+	    To enable pull-up or pull-down resistors, a suffix may be appended to
 	    any of the above gpio modes.  Use + or _pu to enable the pull-up resistor
 	    and - or _pd to enable the pull-down resistor.  Examples:
 
@@ -664,7 +664,7 @@ usage () {
 	    list valid <mode> values for <pin>
 
 	$NAME -i <pin>
-	    show information to <pin>
+	    show information for <pin>
 
 	$NAME -q <pin>
 	    query pin and report configuration details
