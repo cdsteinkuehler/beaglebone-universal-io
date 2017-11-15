@@ -20,7 +20,7 @@ fi
 # PIN: function when no cape is loaded
 # PINMUX: pin multiplexer functions when cape is loaded
 # INFO: information to pin functions, starts with information for PIN and then PINMUX
-# CAPE: cape that enables pinmuxing for specific pin, if no cape is set the pin is not modifyable
+# CAPE: cape that enables pinmuxing for specific pin, if no cape is set the pin is not modifiable
 # GPIO: kernel GPIO pin number
 # PRU: PRU pin number
 
